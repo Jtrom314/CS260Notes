@@ -288,3 +288,263 @@ The `canvas` element was introduced to HTML in order to facilitate 2D drawing an
 </script>
 ```
  
+# CSS
+ The first step in understanding CSS is mastering how to select the elements that a CSS rule applies to. The CSS rule selector can take many forms. In order to explain the most common selectors we need some demonstration HTML. Let's image a simple document describing the departments in a university. In our case we have a physics and a chemistry department. The information provided is very sparse, but the structure provided by the HTML is enough to work with.
+
+```html
+<body>
+  <h1>Departments</h1>
+  <p>welcome message</p>
+  <section id="physics">
+    <h2>Physics</h2>
+    <p class="introduction">Introduction</p>
+    <p>Text</p>
+    <p class="summary">Summary</p>
+  </section>
+  <section id="chemistry">
+    <h2>Chemistry</h2>
+    <p class="introduction">Introduction</p>
+    <p>Text</p>
+    <p class="summary">Summary</p>
+  </section>
+</body>
+```
+
+By default every browser defines a base set of styles that it applies to all HTML. This varies slightly from browser to browser, but for the most part our document would render like this using the base browser styles.
+
+![CSS selectors base](cssSelectorBase.jpg)
+
+We would like to style our document so that it looks like this when we are done.
+
+![CSS selectors final](cssSelectorFinal.jpg)
+
+## Element type selector
+
+To start things off, we want to make all elements in the document use a sans-serif font. We can do this by using an element name selector. By selecting the `body` element we will cascade our declaration down to all the children of the body, which is the whole document.
+
+```css
+body {
+  font-family: sans-serif;
+}
+```
+
+Note that we could also use the wildcard element name selector (`*`) to select all elements, but for our needs the `body` element will work just fine.
+
+We can also use element name selectors to give a bottom border to the top level heading (`h1`), as well as modify the section elements to pop out with a gray background and some white space in the padding and margins.
+
+```css
+h1 {
+  border-bottom: thin black solid;
+}
+
+section {
+  background: #eeeeee;
+  padding: 0.25em;
+  margin-bottom: 0.5em;
+}
+```
+
+## Combinators
+
+Next we want to change the color of the second level headings (`h2`), but we only want to do that within the sections for each department. To make that happen we can provide a `descendant combinator` that is defined with a space delimited list of values where each item in the list is a descendant of the previous item. So our selector would be all `h2` elements that are descendants of `section` elements.
+
+```css
+section h2 {
+  color: #004400;
+}
+```
+
+There are other types of combinators that you can use. These include the following.
+
+| Combinator       | Meaning                    | Example        | Description                                |
+| ---------------- | -------------------------- | -------------- | ------------------------------------------ |
+| Descendant       | A list of descendants      | `body section` | Any section that is a descendant of a body |
+| Child            | A list of direct children  | `section > p`  | Any p that is a direct child of a section  |
+| General sibling  | A list of siblings         | `p ~ div`      | Any p that has a div sibling               |
+| Adjacent sibling | A list of adjacent sibling | `p + div`      | Any p that has an adjacent div sibling     |
+
+We can use the general sibling combinator to increase the whitespace padding on the left of paragraphs that are siblings of a level two heading.
+
+```css
+h2 ~ p {
+  padding-left: 0.5em;
+}
+```
+
+## Class selector
+
+The next selector we will use is the class selector. Remember that any element can have zero or more classification applied to it. For example, our document has a class of `introduction` applied to the first paragraph, and a class of `summary` applied to the final paragraph of each section. If we want to bold the summary paragraphs we would supply the class name summary prefixed with a period (`.summary`).
+
+```css
+.summary {
+  font-weight: bold;
+}
+```
+
+You can also combine the element name and class selectors to select all paragraphs with a class of summary.
+
+```css
+p.summary {
+  font-weight: bold;
+}
+```
+
+## ID selector
+
+ID selectors reference the ID of an element. All IDs should be unique within an HTML document and so this select targets a specific element. To use the ID selector you prefix the ID with the hash symbol (`#`). We would like to showcase our physics department by putting a thin purple border along the left side of the physics section.
+
+```css
+#physics {
+  border-left: solid 1em purple;
+}
+```
+
+## Attribute selector
+
+Attribute selectors allow you to select elements based upon their attributes. You use an attribute selector to select any element with a given attribute (`a[href]`). You can also specify a required value for an attribute (`a[href="./fish.png"]`) in order for the selector to match. Attribute selectors also support wildcards such as the ability to select attribute values containing specific text (`p[href*="https://"]).
+
+```css
+p[class='summary'] {
+  color: red;
+}
+```
+
+For a full description of attribute selections refer to [MDN](https://developer.mozilla.org/en-US/docs/Web/CSS/Attribute_selectors).
+
+## Pseudo selector
+
+CSS also defines a significant list of pseudo selectors which select based on positional relationships, mouse interactions, hyperlink visitation states, and attributes. We will give just one example. Suppose we what our purple highlight bar to appear only when the mouse hovers over the text. To accomplish this we can change our ID selector to select whenever a section is hovered over.
+
+```css
+section:hover {
+  border-left: solid 1em purple;
+}
+```
+ 
+ CSS rule declarations specify a property and value to assign when the rule selector matches one or more elements. There are legions of possible properties defined for modifying the style of an HTML document. For our purposes we will discuss just a few of the more commonly used ones so that you can get a feel for wide variety of functionality they represent.
+
+| Property           | Value                              | Example             | Discussion                                                                     |
+| ------------------ | ---------------------------------- | ------------------- | ------------------------------------------------------------------------------ |
+| background-color   | color                              | `red`               | Fill the background color                                                      |
+| border             | color width style                  | `#fad solid medium` | Sets the border using shorthand where any or all of the values may be provided |
+| border-radius      | unit                               | `50%`               | The size of the border radius                                                  |
+| box-shadow         | x-offset y-offset blu-radius color | `2px 2px 2px gray`  | Creates a shadow                                                               |
+| columns            | number                             | `3`                 | Number of textual columns                                                      |
+| column-rule        | color width style                  | `solid thin black`  | Sets the border used between columns using border shorthand                    |
+| color              | color                              | `rgb(128, 0, 0)`    | Sets the text color                                                            |
+| cursor             | type                               | `grab`              | Sets the cursor to display when hovering over the element                      |
+| display            | type                               | `none`              | Defines how to display the element and its children                            |
+| filter             | filter-function                    | `grayscale(30%)`    | Applies a visual filter                                                        |
+| float              | direction                          | `right`             | Places the element to the left or right in the flow                            |
+| flex               |                                    |                     | Flex layout. Used for responsive design                                        |
+| font               | family size style                  | `Arial 1.2em bold`  | Defines the text font using shorthand                                          |
+| grid               |                                    |                     | Grid layout. Used for responsive design                                        |
+| height             | unit                               | `.25em`             | Sets the height of the box                                                     |
+| margin             | unit                               | `5px 5px 0 0`       | Sets the margin spacing                                                        |
+| max-[width/height] | unit                               | `20%`               | Restricts the width or height to no more than the unit                         |
+| min-[width/height] | unit                               | `10vh`              | Restricts the width or height to no less than the unit                         |
+| opacity            | number                             | `.9`                | Sets how opaque the element is                                                 |
+| overflow           | [visible/hidden/scroll/auto]       | `scroll`            | Defines what happens when the content does not fix in its box                  |
+| position           | [static/relative/absolute/sticky]  | `absolute`          | Defines how the element is positioned in the document                          |
+| padding            | unit                               | `1em 2em`           | Sets the padding spacing                                                       |
+| left               | unit                               | `10rem`             | The horizontal value of a positioned element                                   |
+| text-align         | [start/end/center/justify]         | `end`               | Defines how the text is aligned in the element                                 |
+| top                | unit                               | `50px`              | The vertical value of a positioned element                                     |
+| transform          | transform-function                 | `rotate(0.5turn)`   | Applies a transformation to the element                                        |
+| width              | unit                               | `25vmin`            | Sets the width of the box                                                      |
+| z-index            | number                             | `100`               | Controls the positioning of the element on the z axis                          |
+
+## Units
+
+📖 **Suggested reading**: [MDN Values and units](https://developer.mozilla.org/en-US/docs/Learn/CSS/Building_blocks/Values_and_units)
+
+You can use a variety of units when defining the size of a CSS property. For example, a the width of an element can be defined using absolute units such as the number of pixels (`px`) or inches (`in`). You can also use relative units such as a percentage of the parent element (`50%`), a percentage of a minimum viewport dimension (`25vmin`), or a multiplier of the size of the letter m (`1.5rem`) as defined by the root element.
+
+```css
+p {
+  width: 25%;
+  height: 30vh;
+}
+```
+
+Here is a list of the most commonly used units. All of the units are prefixed with a number when used as a property value.
+
+| Unit | Description                                                      |
+| ---- | ---------------------------------------------------------------- |
+| px   | The number of pixels                                             |
+| pt   | The number of points (1/72 of an inch)                           |
+| in   | The number of inches                                             |
+| cm   | The number of centimeters                                        |
+| %    | A percentage of the parent element                               |
+| em   | A multiplier of the width of the letter `m` in the parent's font |
+| rem  | A multiplier of the width of the letter `m` in the root's font   |
+| ex   | A multiplier of the height of the element's font                 |
+| vw   | A percentage of the viewport's width                             |
+| vh   | A percentage of the viewport's height                            |
+| vmin | A percentage of the viewport's smaller dimension                 |
+| vmax | A percentage of the viewport's larger dimension                  |
+
+## Color
+
+📖 **Suggested reading**: [MDN Applying color](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Colors/Applying_color)
+
+CSS defines multiple ways to describe color, ranging from representations familiar to programmers and ones familiar to layout designers and artists.
+
+| Method       | Example                   | Description                                                                                                                                                                                                       |
+| ------------ | ------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| keyword      | `red`                     | A set of predefined colors (e.g. white, cornflowerblue, darkslateblue)                                                                                                                                            |
+| RGB hex      | `#00FFAA22` or `#0FA2`    | Red, green, and blue as a hexadecimal number, with an optional alpha opacity                                                                                                                                      |
+| RGB function | `rbg(50%, 255, 128, 0.5)` | Red, green, and blue as a percentage or number between 0 and 255, with an optional alpha opacity percentage                                                                                                       |
+| HSL          | `hsl(180, 30%, 90%, 0.5)` | Hue, saturation, and light, with an optional opacity percentage. Hue is the position on the 365 degree color wheel (red is 0 and 255). Saturation is how gray the color is, and light is how bright the color is. |
+
+ Modern web applications are expected to run well on a large variety of computing devices. This includes everything from desktops, to mobile phones, to shopping kiosks, to car dashboards. This ability to reconfigure the interface so the application accommodates and takes advantage of the screen's size and orientation is called `responsive design`.
+
+Much of HTML and CSS is already fluid due to the fact that it responds to the browser window being resized. For example a paragraph element will resize when the browser window is resized. However, the following features can completely change the layout of the application based on the device's size and orientation.
+
+## Display
+ The CSS display property allows you to change how an HTML element is displayed by the browser. The common options for the display property include the following.
+
+| Value  | Meaning                                                                                                                      |
+| ------ | ---------------------------------------------------------------------------------------------------------------------------- |
+| none   | Don't display this element. The element still exists, but the browser will not render it.                                    |
+| block  | Display this element with a width that fills its parent element. A `p` or `div` element has block display by default.        |
+| inline | Display this element with a width that is only as big as its content. A `b` or `span` element has block display by default.  |
+| flex   | Display this element's children in a flexible orientation.                                                                   |
+| grid   | Display this element's children in a grid orientation.                                                                       |
+
+We can demonstrate the different CSS display property values with the following HTML that contains a bunch of `div` elements. By default `div` elements have a display property value of `block`.
+ 
+ ## Viewport meta tag
+
+When smart mobile devices started gaining popularity they began to be used to view websites. However, the websites were optimized for desktop displays and not little tiny mobile screens. To solve this mobile browsers automatically started scaling the website so that it looked better on a small screen. Unfortunately, as web applications started being responsive to the screen size, the mobile browser's scaling got in the way. The solution is to include a meta tag in the `head` element of all your HTML pages. This tells the browser to not scale the page.
+
+```html
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+```
+
+## Float
+
+The float css property moves an element to the left or right of its container element and allows inline elements to wrap around it. For example, if we had an `aside` element followed by a large paragraph of text, we could create the following CSS rule in order to cause the text to wrap around the aside.
+
+```css
+aside {
+  float: right;
+  padding: 3em;
+  margin: 0.5em;
+  border: black solid thin;
+}
+```
+ 
+ ## Media queries
+
+One of the main CSS features for creating responsive applications is the `@media` selector. This selector dynamically detects the size and orientation of the device and applies CSS rules to represent the structure of the HTML in a way that accommodates the change.
+
+We can use the `@media` selector to tell us which side of the screen (technically the viewport) is the longest. A media query takes one or more predicates separated by boolean operators. In our case we simply want to know if the screen is oriented in portrait mode (short side on top) or not. If it is then we transform all of our div elements by rotating them 270 degrees.
+
+```css
+@media (orientation: portrait) {
+  div {
+    transform: rotate(270deg);
+  }
+}
+```
