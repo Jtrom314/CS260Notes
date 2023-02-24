@@ -1400,7 +1400,7 @@ function templateLiterals() {
   let name = 'amigo';
   console.log(`Template ${'literal'}! ${name});
 }
-
+```
 # JavaScript exceptions
 
 📖 **Suggested reading**: [MDN try...catch](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/try...catch)
