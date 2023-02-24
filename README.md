@@ -857,7 +857,13 @@ Once you have Bootstrap linked in your HTML files you can begin using the compon
 <button type="button">Plain</button>
 ```
 
-#JavaScript
+# JavaScript
+
+# Truthy and Falsy
+
+In Javascript, a truthy value is a value that is considered  `TRUE` when encountered in a Boolean context. All values are truthy unless they are dfined as falsy. That is, all values are truthy except  `false`, 0, -0, 0n, "", `null`, `undefined` and `NaN`.
+
+
 
 # Functions
 
@@ -1387,6 +1393,14 @@ const p = person(...['Ryan', 'Dahl']);
 console.log(p);
 // OUTPUT: {first: 'Ryan', last: 'Dahl'}
 ```
+# Javascript Template literal
+
+```js
+function templateLiterals() {
+  let name = 'amigo';
+  console.log(`Template ${'literal'}! ${name});
+}
+
 # JavaScript exceptions
 
 📖 **Suggested reading**: [MDN try...catch](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/try...catch)
