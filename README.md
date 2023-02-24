@@ -43,10 +43,10 @@ The other primary purpose of the console is to execute commands. You already did
 You can also chain the input and output of commands using special characters
 | Opperator | Explanation | Example |
 |-----------|-------------| --------|
-| '\\'     | Take the output from the command on the left and pipe, or pass, it to the command on the right | `cat input.txt \| xxd` |
-| '>'     | Redirect output to a file. Overwrites the file if it exists | `echo "CS260" > text.txt` |
-| '>>'    | Redirect output to a file. Appends if the file exists | `echo "More CS 260" >> text.txt` |
-| '<'     | Redirect of file to input | `xxd < text.txt` | 
+| ```\|```     | Take the output from the command on the left and pipe, or pass, it to the command on the right | `cat input.txt \| xxd` |
+| ```>```     | Redirect output to a file. Overwrites the file if it exists | `echo "CS260" > text.txt` |
+| ```>>```    | Redirect output to a file. Appends if the file exists | `echo "More CS 260" >> text.txt` |
+| ```<```     | Redirect of file to input | `xxd < text.txt` | 
 
 # Git/GitHub
  
