@@ -1,4 +1,4 @@
-# CS260Notes
+# CS 260 Notes
 General Notes for CS260 for use on the midterm and final
 
 # Jusification for actions:
@@ -94,7 +94,24 @@ As you can see, there is a lot of levels of name caching. This is done for perfo
    </body>
    </html>
 ```
-HTML is the structure of a webpage 
+HTML is the structure of a webpage built on tags
+
+Sample elements
+
+| Element | Description |
+|---------|-------------|
+| `<div>` | Basic block element |
+| `<span>` | Same as div but is an inline element |
+| `<nav>` | |
+| `<h1><h2><h3><h4><h5><h6><p>`| Basic text element tags |
+| `<b> <strong> <i> <em>` | Bold, important text, italic, emphisized text |
+| `<table>` | Represents tabular data |
+| `<tbody>` | Encapsulates a set of table rows (`<tr>` elements), indicating that they comprise the body of the table (`<table>`) |
+| `<thead>` | Defines a set of rows defing the head of the columns of the table. |
+| `<th>` | Defines a cell as header of a group of table cells. |
+| `<td>` | Defines a cell of a table that contains data |
+| `<tr>` | Defines a row of cells in a table. The row's cells can then be established using a mix of `<td>` and `<th>` elements |
+| `<li>` | Represents an item in a list. It must be contained in a parent element: an ordered list (`<ol>`), an unordered list (`<ul>`), or a menu (`<menu>`). In menues and unordered lists, list items are usually displayed using bullet points. In ordered lists, they are usually displayed with an ascending counter on the left, such as a number or letter |
  
 HTML Input
 
@@ -1082,6 +1099,11 @@ console.log(a[1]);
 
 console.log(a.length);
 // OUTPUT: 3
+
+for (let j in a) {
+   console.log(a[j]);
+}
+
 ```
 
 ## Object functions
