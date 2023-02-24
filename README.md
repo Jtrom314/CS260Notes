@@ -550,6 +550,8 @@ We can use the `@media` selector to tell us which side of the screen (technicall
   }
 }
 ```
+
+
 # CSS Animation
 
 📖 **Suggested reading**: [MDN Animation](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Animations/Using_CSS_animations)
@@ -607,6 +609,235 @@ That's every thing we need to do. However, let's made one more addition. It woul
     font-size: 20vh;
   }
 }
+```
+
+# CSS Flexbox
+
+**Recommend reading**:
+
+- [MDN Flexbox](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Flexible_Box_Layout/Basic_Concepts_of_Flexbox)
+- [CSS Tricks Flexbox](https://css-tricks.com/snippets/css/a-guide-to-flexbox/)
+- [Flexbox Froggy](https://flexboxfroggy.com/)
+
+The `flex` display layout is useful when you want to partition your application into areas that responsively move around as the window resizes or the orientation changes. In order to demonstrate the power of flex we will build an application that has a header, footer, and a main content area that is split into two sections, with controls of the left and content on the right.
+
+So we can visualize our design by quickly sketching it out.
+
+![CSS App mock](cssAppMock.jpg)
+
+Next we build our structural HTML to match our design.
+
+```html
+<body>
+  <header>
+    <h1>CSS flex &amp; media query</h1>
+  </header>
+  <main>
+    <section>
+      <h2>Controls</h2>
+    </section>
+    <section>
+      <h2>Content</h2>
+    </section>
+  </main>
+  <footer>
+    <h2>Footer</h2>
+  </footer>
+</body>
+```
+
+Now we can use Flexbox to make it all come alive. We make the body element into a responsive flexbox by including the CSS `display` property with the value of `flex`. This tells the browser that all of the children of this element are to be displayed in a flex flow. We want our top level flexbox children to be column oriented and so we add the `flex-direction` property with a value of `column`. We then add some simple other declarations to zero out the margin and fill the entire viewport with our application frame.
+
+```css
+body {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  height: 100vh;
+}
+```
+
+To get the division of space for the flexbox children correct we add the following flex properties to each of the children.
+
+- **header** - `flex: 0 80px` - Zero means it will not grow and 80px means it has a starting basis height of 80 pixels. This creates a fixed size box.
+- **footer** - `flex: 0 30px` - Like the header it will not grow and has a height of 30 pixels.
+- **main** - `flex: 1` - One means it will get one fractional unit of growth, and since it is the only child with a non-zero growth value, it will get all the remaining space. Main also gets some additional properties because with want it to also be a flexbox container for the controls and content area. So we set its display to be `flex` and specify the `flex-direction` to be row so that the children are oriented side by side.
+
+```css
+header {
+  flex: 0 80px;
+  background: hsl(223, 57%, 38%);
+}
+
+footer {
+  flex: 0 30px;
+  background: hsl(180, 10%, 10%);
+}
+
+main {
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+}
+```
+
+Now we just need to add CSS to the control and content areas represented by the two child section elements. We want the controls to have 25% of the space and the content to have the remaining. So we set the `flex` property value to 1 and 3 respectively. That means that the controls get one unit of space and the content gets three units of space. No matter how we resize things this ratio will responsively remain.
+
+```css
+section:nth-child(1) {
+  flex: 1;
+  background-color: hsl(180, 10%, 80%);
+}
+section:nth-child(2) {
+  flex: 3;
+  background-color: white;
+}
+```
+
+## Media Query
+
+That completes our original design, but we also want to handle small screen sizes. To do this, we add some media queries that drop the header and footer if the viewport gets too short, and orients the main sections as rows if it gets too narrow.
+
+To support the narrow screen (portrait mode), we include a media query that detects when we are in portrait orientation and sets the `flex-direction` of the main element to be column instead of row. This causes the children to be stacked on top of each other instead of side by side.
+
+To handle making our header and footer disappear when the screen is to short to display them, we use a media query that triggers when our viewport height has a maximum value of 700 pixels. When that is true we change the `display` property for both the header and the footer to `none` so that they will be hidden. When that happens the main element becomes the only child and since it has a flex value of 1, it takes over everything.
+
+```css
+@media (orientation: portrait) {
+  main {
+    flex-direction: column;
+  }
+}
+
+@media (max-height: 700px) {
+  header {
+    display: none;
+  }
+  footer {
+    display: none;
+  }
+}
+```
+
+# CSS Grid
+
+**Recommend reading**:
+
+- [MDN Grid](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Grid_Layout/Basic_Concepts_of_Grid_Layout)
+- [Grid by example](https://gridbyexample.com/)
+
+The `grid` display layout is useful when you want to display a group of child elements in a responsive grid. We start with a container element that has a bunch of child elements.
+
+```html
+<div class="container">
+  <div class="card"></div>
+  <div class="card"></div>
+  <div class="card"></div>
+  <div class="card"></div>
+  <div class="card"></div>
+  <div class="card"></div>
+  <div class="card"></div>
+  <div class="card"></div>
+  <div class="card"></div>
+</div>
+```
+
+We turn this into a responsive grid by including a CSS `display` property with the value of `grid` on the container element. This tells the browser that all of the children of this element are to be displayed in a grid flow. The next property, `grid-template-columns`, specifies the layout of the grid columns. In this example we say that we want to repeatedly define each column to auto-fill the parent element's width with children that are resized to a minimum of 300 pixels and a maximum of one equal fractional unit (`1fr`) of the grid width. A fractional unit is dynamically computed by splitting up the parent element's width into equal parts for each of the children.
+
+We finish off the grid configuration by saying that we want all rows to be exactly 300 pixels high with the `grid-auto-rows` property and the use the `grid-gap` property to say that we want at least a 1 em gap between our grid items.
+
+```css
+.container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  grid-auto-rows: 300px;
+  grid-gap: 1em;
+}
+```
+
+# CSS Frameworks
+
+CSS frameworks provide functions and components that commonly appear in web applications. As web developers built more and more web applications they began to use the same patterns over and over. They combined these patterns into a shared package of code and contributed it to the world as open source repositories. This helped not only decrease the time to develop an application, but created a common user experience for the web in general.
+
+Today, there are lots of different open source CSS frameworks available to choose from. Many of them contain the same types of functionality, but they all bring something a little different to the table.
+
+![css frameworks](cssStateOfCss.jpg)
+
+\- **Source**: [_StateOfCSS CSS framework poll_](https://2021.stateofcss.com/en-US/technologies/css-frameworks)
+
+## Tailwind
+
+A new rising contender in the CSS framework space is [Tailwind CSS](https://tailwindcss.com/) and its associated component library [Tailwind UI](https://tailwindui.com/). In the 2022 StateOfCSS poll, Tailwind gained an impressive 46% general usage ranking with a retention rating of 78%, all within the last four years.
+
+Tailwind takes a different approach than traditional CSS frameworks. Instead of using large, rich, CSS rulesets to compartmentalize styling and functionality, it uses smaller definitions that are applied specifically to individual HTML elements. This moves much of the CSS representation out of the CSS file and directly into the HTML.
+
+```html
+<div class="pt-6 md:p-8 text-center md:text-left space-y-4">
+  <img class="w-24 h-24 md:w-48 md:h-auto md:rounded-none rounded-full mx-auto" src="profile.png" />
+  <p class="text-lg font-medium">“Tailwind CSS”</p>
+</div>
+```
+
+## Bootstrap
+
+🔑 **Required reading**: [Getting started with Bootstrap](https://getbootstrap.com/docs/5.2/getting-started/introduction/)
+
+The reigning champion for CSS frameworks is [Bootstrap](https://getbootstrap.com/). Bootstrap has been supported by an active and vibrant community for over a decade and contains many lessons learned from real world applications. The major downside of Bootstrap is its own success. Because it is so popular, Bootstrap defines the de facto look and feel of websites. This is great for user experience continuity, but it makes it difficult for a website to grab the attention of new users.
+
+### Getting bootstrap
+
+You can integrate Bootstrap into your web applications simply by referencing the Bootstrap CSS files from their [content delivery network](https://getbootstrap.com/docs/5.2/getting-started/introduction/#cdn-links) (CDN). You then add the HTML link elements to your head element like this.
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65"
+      crossorigin="anonymous"
+    />
+  </head>
+  <body>
+    ...
+  </body>
+</html>
+```
+
+If you are going to use Bootstrap components that require JavaScript (carousel, buttons, and more), you will also need to include Bootstrap's JavaScript module. You add this by putting the following at the end of your HTML body element.
+
+```html
+<body>
+  ...
+
+  <script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
+    crossorigin="anonymous"
+  ></script>
+</body>
+```
+
+Later on, when we introduce the idea of bundling your application, you will want to use the Node Package Manager (NPM) to download Bootstrap and include it in your source code so that you don't have to rely on someone else's server to provide you with a vital piece of your application. To include Bootstrap in your application using NPM you would run the following from your console.
+
+```sh
+npm install bootstrap@5.2.3
+```
+
+⚠ Note that those links are version specific (version 5 in this case). You will want to get the latest version links when you begin building your application.
+
+### Using bootstrap
+
+Once you have Bootstrap linked in your HTML files you can begin using the components it provides. Let's start with a simple button. When we use the Bootstrap `btn` CSS class, the button gets a nice looking rounded appearance. The Bootstrap `btn-primary` CSS class shades the button with the current primary color for the application, which by default is blue. The following demonstrates the difference between a Bootstrap style button and a plain vanilla button. Functionally they both work exactly the same. The Bootstrap button is just a lot easier on the eyes.
+
+```html
+// Bootstrap styled button
+<button type="button" class="btn btn-primary">Bootstrap</button>
+
+// Default browser styled button
+<button type="button">Plain</button>
 ```
 
 #JavaScript
