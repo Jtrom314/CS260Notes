@@ -2,7 +2,8 @@
 General Notes for CS260 for use on the midterm and final
 
 # Jusification for actions:
-Professor Jensen (Discord CS 260 Help; General; 02/17/2023)
+Professor Jensen (Discord CS 260 Help; General; 02/17/2023) [View message here:](https://discord.com/channels/748656649287368704/748656649287368708/1076153677422788628)
+
 "Your start up README.md should be a big repository of everything you are discovering and want to record. **Put whatever you would like in there.**  The midterm is 60 multiple choice questions covering the Console, Internet, HTML, CSS, and JavaScript. No time limit. Make sure you come to the in-person review on March 6th, 3 PM (JKB 3108). That should set you up for success."
 
 # The Console
