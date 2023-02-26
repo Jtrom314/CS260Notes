@@ -55,27 +55,140 @@ You can also chain the input and output of commands using special characters
 * git commit
 * git push
 
-# The Internet
+# The internet
 
-Network internals
+📖 **Suggested reading**:
+
+- [MDN How does the Internet work?](https://developer.mozilla.org/en-US/docs/Learn/Common_questions/How_does_the_Internet_work)
+- [YouTube The Internet in 5 Minutes](https://youtu.be/7_LPdttKXPc)
+
+The internet globally connects independent networks and computing devices. In a simplistic way, you can think of the internet as a massive redundant collection of wires that connect up all the computers in the world. A lot of those wires are wireless (wiFi, satellite, or cell), and not all of computers in the world are connected, but generally that is what the internet is. The deeper your mental model of the internet is, the more effectively you will be able to create web applications.
+
+![Internet connections](internetConnections.jpg)
+
+## Making connections
+
+When one device wants to talk to another it must have an IP address. For example, `128.187.16.184` is BYU's address. Usually, human users prefer a symbolic name over an IP address. The symbolic name is called a domain name. Domain names are converted to IP address by doing a lookup in the Domain Name System (DNS). You can look up the IP address for any domain name using the `dig` console utility.
+
+```sh
+➜  dig byu.edu
+
+byu.edu.		5755	IN	A	128.187.16.184
+```
+
+![Internet requests](internetRequests.jpg)
+
+Once you have the IP address, you connect to the device it represents by first asking for a connection route to the device. A connection route consists of many hops across the network until the destination is dynamically discovered and the connection established. With the connection the transport and application layers start exchanging data.
+
+### Traceroute
+
+You can determine the hops in a connection using the `traceroute` console utility. In the following example, we trace the route between a home computer and BYU. In the result you see the first address `192.168.1.1`. This is the address of the network router the home computer is connected to. From there it goes through a couple devices that do not identify themselves and then hits the Google Fiber gateway. Google Fiber is the internet service provider, or ISP, for the requesting device. Then we jump through a few more unidentified devices before finally arriving at BYU (`128.187.16.184`).
+
+```sh
+➜  traceroute byu.edu
+
+traceroute to byu.edu (128.187.16.184), 64 hops max, 52 byte packets
+ 1  192.168.1.1 (192.168.1.1)  10.942 ms  4.055 ms  4.694 ms
+ 2  * * *
+ 3  * * *
+ 4  192-119-18-212.mci.googlefiber.net (192.119.18.212)  5.369 ms  5.576 ms  6.456 ms
+ 5  216.21.171.197 (216.21.171.197)  6.283 ms  6.767 ms  5.532 ms
+ 6  * * *
+ 7  * * *
+ 8  * * *
+ 9  byu.com (128.187.16.184)  7.544 ms !X *  40.231 ms !X
+
+```
+
+If I run traceroute again I might see a slightly different route since every connection through the internet is dynamically calculated. The ability to discover a route makes the internet resilient when network devices fail or disappear from the network.
+
+## Network internals
+The actual sending of data across the internet uses the TCP/IP model. This is a layered architecture that covers everything from the physical wires to the data that a web application sends. At the top of the TCP/IP protocol is the application layer. It represents user functionality, such as the web (HTTP), mail (SMTP), files (FTP), remote shell (SSH), and chat (IRC). Underneath that is the transport layer which breaks the application layer's information into small chunks and sends the data. The actual connection is made using the internet layer. This finds the device you want to talk to and keeps the connection alive. Finally, at the bottom of the model is the link layer which deals with the physical connections and hardware.
+## Network internals
+
 The actual sending of data across the internet uses the TCP/IP model. This is a layered architecture that covers everything from the physical wires to the data that a web application sends. At the top of the TCP/IP protocol is the application layer. It represents user functionality, such as the web (HTTP), mail (SMTP), files (FTP), remote shell (SSH), and chat (IRC). Underneath that is the transport layer which breaks the application layer's information into small chunks and sends the data. The actual connection is made using the internet layer. This finds the device you want to talk to and keeps the connection alive. Finally, at the bottom of the model is the link layer which deals with the physical connections and hardware.
 
-TCP/IP layers
-Layer	Example	Purpose
-Application	HTTPS	Functionality like web browsing
-Transport	TCP	Moving connection information packets
-Internet	IP	Establishing connections
-Link	Fiber, hardware	Physical connections
+### [TCP/IP](https://en.wikipedia.org/wiki/Internet_protocol_suite) layers
 
-DNS
-Once a domain name is in the registry it can be listed with a domain name system (DNS) server and associated with an IP address. Of course you must also lease the IP address before you can use it to uniquely identify a device on the internet, but that is a topic for another time. Every DNS server in the world references a few special DNS servers that are considered the authoritative name servers for associating a domain name with an IP address.
+| Layer       | Example         | Purpose                               |
+| ----------- | --------------- | ------------------------------------- |
+| Application | HTTPS           | Functionality like web browsing       |
+| Transport   | TCP             | Moving connection information packets |
+| Internet    | IP              | Establishing connections              |
+| Link        | Fiber, hardware | Physical connections                  |
 
-The DNS database records that facilitate the mapping of domain names to IP addresses come in several flavors. The main ones we are concerned with are the address (A) and the canonical name (CNAME) records. An A record is a straight mapping from a domain name to IP address. A CNAME record maps one domain name to another domain name. This acts as a domain name alias. You would use a CNAME to do things like map byu.com to the same IP address as byu.edu so that either one could be used.
+# Domain names
 
-When you enter a domain name into a browser, the browser first checks to see if it has the name already in its cache of names. If it does not, it contacts a DNS server and gets the IP address. The DNS server also keeps a cache of names. If the domain name is not in the cache, it will request the name from an authoritative name server. If the authority does not know the name then you get an unknown domain name error. If the process does resolve, then the browser makes the HTTP connection to the associated IP address.
+📖 **Suggested reading**: [MDN What is a Domain Name](https://developer.mozilla.org/en-US/docs/Learn/Common_questions/What_is_a_domain_name)
 
-As you can see, there is a lot of levels of name caching. This is done for performance reasons, but it also can be frustrating when you are trying to update the information associated with your domain name. This is where the time to live (TTL) setting for a domain record comes into play. You can set this to be something short like 5 minutes or as long as several days. The different caching layers should then honor the TTL and clear their cache after the requested period has passed.
+In the instruction about the internet we showed how an IP address can be referenced by a domain name. You can get the IP address for any domain using the `dig` console utility. Notice that in the following example there are actually multiple IP addresses associated with the domain name `amazon.com`. This allows for redundancy in case one of the IP addresses fails to successfully resolve to a valid connection because the server listening at that IP address is not responding.
 
+```sh
+➜  dig amazon.com
+
+amazon.com.		126	IN	A	205.251.242.103
+amazon.com.		126	IN	A	52.94.236.248
+amazon.com.		126	IN	A	54.239.28.85
+```
+
+A domain name is simply a text string that follows a specific naming convention and is listed in a special database called the domain name registry.
+
+Domain names are broken up into a root domain, with one or more possible subdomain prefixes. The root domain is represented by a secondary level domain and a top level domain. The top level domain (TLD) represent things like `com`, `edu`, or `click`. So a root domain would look something like `byu.edu`, `google.com`, or `cs260.click`. The [possible list of TLDs](https://www.icann.org/resources/pages/tlds-2012-02-25-en) is controlled by ICANN, one of the governing boards of the internet.
+
+![Domain name parts](domainNameParts.jpg)
+
+The owner of a root domain can create any number of subdomains off the root domain. Each subdomain may resolve to a different IP address. So the owner of `cs260.click` can have subdomains for travel (`travel.cs260.click`), finance (`finance.cs260.click`), or a blog (`blog.cs260.click`).
+
+You can get information about a domain name from the domain name registry using the `whois` console utility.
+
+```yaml
+➜  whois byu.edu
+
+Domain Name: BYU.EDU
+
+Registrant:
+	Brigham Young University
+	3009 ITB
+	2027 ITB
+	Provo, UT 84602
+	USA
+
+Administrative Contact:
+	Mark Longhurst
+	Brigham Young University
+	Office of Information Technology
+	1208 ITB
+	Provo, UT 84602
+	USA
+	+1.8014220488
+	markl@byu.edu
+
+Technical Contact:
+	Brent Goodman
+	Brigham Young University
+	Office of Information Technology
+	1203J ITB
+	Provo, UT 84602
+	USA
+	+1.8014227782
+	dnsmaster@byu.edu
+
+Domain record activated:    19-Jan-1987
+Domain record last updated: 11-Jul-2022
+Domain expires:             31-Jul-2025
+```
+
+This provides information such as a technical contact to talk to if there is a problem with the domain, and an administrative contact to talk to if you want to buy the domain. Maybe we should talk to Mark and see if he is willing to sell.
+
+## DNS
+
+Once a domain name is in the registry it can be listed with a domain name system (DNS) server and associated with an IP address. Of course you must also lease the IP address before you can use it to uniquely identify a device on the internet, but that is a topic for another time. Every DNS server in the world references a few special DNS servers that are considered the `authoritative name servers` for associating a domain name with an IP address.
+
+The DNS database records that facilitate the mapping of domain names to IP addresses come in several flavors. The main ones we are concerned with are the `address` (`A`) and the `canonical name` (`CNAME`) records. An `A` record is a straight mapping from a domain name to IP address. A `CNAME` record maps one domain name to another domain name. This acts as a domain name alias. You would use a CNAME to do things like map `byu.com` to the same IP address as `byu.edu` so that either one could be used.
+
+When you enter a domain name into a browser, the browser first checks to see if it has the name already in its cache of names. If it does not, it contacts a DNS server and gets the IP address. The DNS server also keeps a cache of names. If the domain name is not in the cache, it will request the name from an `authoritative name server`. If the authority does not know the name then you get an unknown domain name error. If the process does resolve, then the browser makes the HTTP connection to the associated IP address.
+
+As you can see, there is a lot of levels of name caching. This is done for performance reasons, but it also can be frustrating when you are trying to update the information associated with your domain name. This is where the `time to live` (`TTL`) setting for a domain record comes into play. You can set this to be something short like 5 minutes or as long as several days. The different caching layers should then honor the TTL and clear their cache after the requested period has passed.
 
 # HTML
 ```
@@ -98,20 +211,20 @@ HTML is the structure of a webpage built on tags
 
 Sample elements
 
-| Element | Description |
-|---------|-------------|
-| `<div>` | Basic block element |
-| `<span>` | Same as div but is an inline element |
-| `<nav>` | |
-| `<h1><h2><h3><h4><h5><h6><p>`| Basic text element tags |
-| `<b> <strong> <i> <em>` | Bold, important text, italic, emphisized text |
-| `<table>` | Represents tabular data |
-| `<tbody>` | Encapsulates a set of table rows (`<tr>` elements), indicating that they comprise the body of the table (`<table>`) |
-| `<thead>` | Defines a set of rows defing the head of the columns of the table. |
-| `<th>` | Defines a cell as header of a group of table cells. |
-| `<td>` | Defines a cell of a table that contains data |
-| `<tr>` | Defines a row of cells in a table. The row's cells can then be established using a mix of `<td>` and `<th>` elements |
-| `<li>` | Represents an item in a list. It must be contained in a parent element: an ordered list (`<ol>`), an unordered list (`<ul>`), or a menu (`<menu>`). In menues and unordered lists, list items are usually displayed using bullet points. In ordered lists, they are usually displayed with an ascending counter on the left, such as a number or letter |
+| Element                      | Description                                                                                                          |
+|------------------------------|----------------------------------------------------------------------------------------------------------------------|
+| `<div>`                      | Basic block element                                                                                                  |
+| `<span>`                     | Same as div but is an inline element                                                                                 |
+| `<nav>`                      | |
+| `<h1><h2><h3><h4><h5><h6><p>`| Basic text element tags                                                                                              |
+| `<b> <strong> <i> <em>`      | Bold, important text, italic, emphisized text                                                                        |
+| `<table>`                    | Represents tabular data                                                                                              |
+| `<tbody>`                    | Encapsulates a set of table rows (`<tr>` elements), indicating that they comprise the body of the table (`<table>`)  |
+| `<thead>`                    | Defines a set of rows defing the head of the columns of the table.                                                   |
+| `<th>`                       | Defines a cell as header of a group of table cells.                                                                  |
+| `<td>`                       | Defines a cell of a table that contains data                                                                         |
+| `<tr>`                       | Defines a row of cells in a table. The row's cells can then be established using a mix of `<td>` and `<th>` elements |
+| `<li>`                       | Represents an item in a list. It must be contained in a parent element: an ordered list (`<ol>`), an unordered list (`<ul>`), or a menu (`<menu>`). In menues and unordered lists, list items are usually displayed using bullet points. In ordered lists, they are usually displayed with an ascending counter on the left, such as a number or letter |
  
 HTML Input
 
