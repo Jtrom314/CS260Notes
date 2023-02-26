@@ -6,6 +6,8 @@ Professor Jensen (Discord CS 260 Help; General; 02/17/2023) [View message here:]
 
 "Your start up README.md should be a big repository of everything you are discovering and want to record. **Put whatever you would like in there.**  The midterm is 60 multiple choice questions covering the Console, Internet, HTML, CSS, and JavaScript. No time limit. Make sure you come to the in-person review on March 6th, 3 PM (JKB 3108). That should set you up for success."
 
+Since there weren't any follow up messages placing restrictions on what could be contained in our README.md file, I have taken the liberty to take full advantage of the opportunity at hand.
+
 # The Console
 
 Executing commands
@@ -973,7 +975,7 @@ Once you have Bootstrap linked in your HTML files you can begin using the compon
 
 # JavaScript
 
-# Truthy and Falsy
+## Truthy and Falsy
 
 In Javascript, a truthy value is a value that is considered  `TRUE` when encountered in a Boolean context. All values are truthy unless they are dfined as falsy. That is, all values are truthy except  `false`, 0, -0, 0n, "", `null`, `undefined` and `NaN`.
 
