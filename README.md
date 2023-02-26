@@ -1,4 +1,4 @@
-# CS 260 Notes
+# CS 260 Notes Part I
 General Notes for CS260 for use on the midterm and final
 
 # Jusification for actions:
