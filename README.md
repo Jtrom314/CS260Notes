@@ -1517,6 +1517,57 @@ function templateLiterals() {
   console.log(`Template ${'literal'}! ${name});
 }
 ```
+## Array Destructuring
+
+```js
+  let x, y, z;
+  const a = [1, 2];
+  x = a; //x = 1;
+  console.log(x);
+
+  [x] = a; //x = 1, a = (2)
+
+  [x, y] = a;
+  console.log(x, y); // x = 1, y = 2
+
+  [x, y, z] = a;
+  console.log(x, y, z); //x = 1, y = 2, z = undefined
+
+  [x, y, z = 100] = a;
+  console.log(x, y, z); //x = 1, y = 2, z = 100
+
+  [x, , y, ...z] = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+  console.log(x, y, z); //x = 1, y = 3, z = [4,5,6,7,8,9]
+
+```
+# JavaScript Math
+[MDN JavascriptMath](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math)
+
+Static Properties
+
+|Properity| Explanation |
+|---------| ----------- |
+| Math.e  | Euler's number |
+| Math.LN2  | Natural log |
+| Math.LN10 | Log base 10 |
+| Math.PI   | Ratio of a circle's circumference to its diameter |
+
+
+Static Methods
+| Method | Explanation |
+| -------| ------------|
+| Math.abs() | Returns the absolute value of x |
+| Math.acos() | Returns the arccosin of x |
+| Math.asin() | Returns the arcsin of x |
+| Math.atan() | Returns the arctan of x |
+| Math.ceil() | Returns the smallest integer grather than or equal to x |
+| Math.floor() | Returns the largest integer less than or equal to x |
+| Math.exp() | Returns e^x, where x is the argument, and e is Euler's Number |
+| Math.pow() | Returns base x to the exponent power y |
+| Math.random() | Returns a "random" number between 0 and 1 |
+| Math.round() | Returns the value of the number x rounded to the nearest integer |
+| Math.sqrt() | Returns the positive square root of x |
+
 # JavaScript exceptions
 
 📖 **Suggested reading**: [MDN try...catch](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/try...catch)
