@@ -194,7 +194,7 @@ When you enter a domain name into a browser, the browser first checks to see if 
 As you can see, there is a lot of levels of name caching. This is done for performance reasons, but it also can be frustrating when you are trying to update the information associated with your domain name. This is where the `time to live` (`TTL`) setting for a domain record comes into play. You can set this to be something short like 5 minutes or as long as several days. The different caching layers should then honor the TTL and clear their cache after the requested period has passed.
 
 # HTML
-```
+```html
 <!DOCTYPE html>
    <html lang="en">
    <head>
