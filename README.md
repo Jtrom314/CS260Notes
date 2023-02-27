@@ -1261,7 +1261,29 @@ a.push(4);
 console.log(a.length);
 // OUTPUT: 4
 ```
+## Array Destructuring
 
+```js
+  let x, y, z;
+  const a = [1, 2];
+  x = a; //x = 1;
+  console.log(x);
+
+  [x] = a; //x = 1, a = (2)
+
+  [x, y] = a;
+  console.log(x, y); // x = 1, y = 2
+
+  [x, y, z] = a;
+  console.log(x, y, z); //x = 1, y = 2, z = undefined
+
+  [x, y, z = 100] = a;
+  console.log(x, y, z); //x = 1, y = 2, z = 100
+
+  [x, , y, ...z] = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+  console.log(x, y, z); //x = 1, y = 3, z = [4,5,6,7,8,9]
+
+```
 # JavaScript object and classes
 
 📖 **Suggested reading**: [MDN Classes in JavaScript](https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Objects/Classes_in_JavaScript)
@@ -1516,29 +1538,6 @@ function templateLiterals() {
   let name = 'amigo';
   console.log(`Template ${'literal'}! ${name});
 }
-```
-## Array Destructuring
-
-```js
-  let x, y, z;
-  const a = [1, 2];
-  x = a; //x = 1;
-  console.log(x);
-
-  [x] = a; //x = 1, a = (2)
-
-  [x, y] = a;
-  console.log(x, y); // x = 1, y = 2
-
-  [x, y, z] = a;
-  console.log(x, y, z); //x = 1, y = 2, z = undefined
-
-  [x, y, z = 100] = a;
-  console.log(x, y, z); //x = 1, y = 2, z = 100
-
-  [x, , y, ...z] = [1, 2, 3, 4, 5, 6, 7, 8, 9];
-  console.log(x, y, z); //x = 1, y = 3, z = [4,5,6,7,8,9]
-
 ```
 # JavaScript Math
 [MDN JavascriptMath](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math)
