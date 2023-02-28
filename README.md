@@ -1,12 +1,19 @@
 # CS 260 Notes Part I
-General Notes for CS260 for use on the midterm and final
+General Notes for CS260 for use on the midterm
 
 # Jusification for actions:
 Professor Jensen (Discord CS 260 Help; General; 02/17/2023) [View message here:](https://discord.com/channels/748656649287368704/748656649287368708/1076153677422788628)
 
 "Your start up README.md should be a big repository of everything you are discovering and want to record. **Put whatever you would like in there.**  The midterm is 60 multiple choice questions covering the Console, Internet, HTML, CSS, and JavaScript. No time limit. Make sure you come to the in-person review on March 6th, 3 PM (JKB 3108). That should set you up for success."
 
-Since there weren't any follow up messages placing restrictions on what could be contained in our README.md file, I have taken the liberty to take full advantage of the opportunity at hand.
+Since there weren't any follow up messages placing restrictions on what could be contained in our README.md file, although accessing links placed on the README file were forbidden, I have taken the liberty to take full advantage of the opportunity at hand by placing what I found to be the most useful information in this extremely long document. Enjoy :)
+
+# My Project
+To ssh into the web server:
+  `ssh -i <production key> ubuntu@<domain name>`
+To upload files to the web server:
+  `<bash script> -k <production key> -h <domain name> {-s <service>}`
+
 
 # The Console
 
@@ -14,34 +21,34 @@ Executing commands
 The other primary purpose of the console is to execute commands. You already did this in the previous section when you executed commands for working with the file system. However, console commands can perform many different operations. Here are some basic commands that you show experiment with.
 
 
-| Command | Explanation |
-|---------|-------------|
-| echo    | Output the parameters of the command |
-| cd      | Change directory |
-| mkdir   | make directory |
-| rmdir   | remove directory |
-| rm      | remove files |
-| mv      | move files |
-| cp      | copy files |
-| ls      | list files |
-| curl    | command line client URL browser |
-| grep    | regular expression search |
-| find    | find files |
+| Command | Explanation                                      |
+|---------|--------------------------------------------------|
+| echo    | Output the parameters of the command             |
+| cd      | Change directory                                 |
+| mkdir   | make directory                                   |
+| rmdir   | remove directory                                 |
+| rm      | remove files                                     |
+| mv      | move files                                       |
+| cp      | copy files                                       |
+| ls      | list files                                       |
+| curl    | command line client URL browser                  |
+| grep    | regular expression search                        |
+| find    | find files                                       |
 | top     | view running processes with CPU and memory usage |
-| df      | view disk statistics |
-| cat     | output the contents of a file |
-| less    | interactively output the contents of a file |
-| wc      | count the words in a file |
-| ps      | view the currently running processes |
-| kill    | kill a currently running process |
-| sudo    | execute a command as a super user or admin |
-| ssh     | create a secure shell on a remote computer |
-| scp     | securely copy files to a remote computer |
-| history | show the history of commands |
-| ping    | check if a website is up |
-| tracert | trace the connections to a website |
-| dig     | show the DNS information for a domain |
-| man     | Look up a command in the manual |
+| df      | view disk statistics                             |
+| cat     | output the contents of a file                    |
+| less    | interactively output the contents of a file      |
+| wc      | count the words in a file                        |
+| ps      | view the currently running processes             |
+| kill    | kill a currently running process                 |
+| sudo    | execute a command as a super user or admin       |
+| ssh     | create a secure shell on a remote computer       |
+| scp     | securely copy files to a remote computer         |
+| history | show the history of commands                     |
+| ping    | check if a website is up                         |
+| tracert | trace the connections to a website               |
+| dig     | show the DNS information for a domain            |
+| man     | Look up a command in the manual                  |
 
 You can also chain the input and output of commands using special characters
 | Opperator | Explanation | Example |
@@ -204,7 +211,33 @@ As you can see, there is a lot of levels of name caching. This is done for perfo
    </head>
    <body>
       <header></header>
-      <main></main>
+      <main>
+        <div></div>
+        <section></section>
+        <span></span>
+        <ul>
+          <li>Item1</li>
+          <li>Item2</li>
+          <li>Item3</li>
+        </ul>
+        <ol>
+          <li>Item1</li>
+          <li>Item2</li>
+          <li>Item3</li>         
+        </ol>
+        <table>
+          <tr>
+            <th>Header1</th>
+            <th>Header2</th>
+            <th>Header3</th>
+          </tr>
+          <tr>
+            <td>Item1</td>
+            <td>Item1</td>
+            <td>Item1</td>
+          </tr>
+        </table>
+      </main>
       <footer></footer>
       <script src="index.js"></script>
    </body>
@@ -218,8 +251,8 @@ Sample elements
 |------------------------------|----------------------------------------------------------------------------------------------------------------------|
 | `<div>`                      | Basic block element                                                                                                  |
 | `<span>`                     | Same as div but is an inline element                                                                                 |
-| `<nav>`                      | |
-| `<h1><h2><h3><h4><h5><h6><p>`| Basic text element tags                                                                                              |
+| `<nav>`                      | Defines a navigational element |
+| `<h1> <h2> <h3> <h4> <h5> <h6> <p>`| Basic text element tags                                                                                              |
 | `<b> <strong> <i> <em>`      | Bold, important text, italic, emphisized text                                                                        |
 | `<table>`                    | Represents tabular data                                                                                              |
 | `<tbody>`                    | Encapsulates a set of table rows (`<tr>` elements), indicating that they comprise the body of the table (`<table>`)  |
@@ -228,8 +261,25 @@ Sample elements
 | `<td>`                       | Defines a cell of a table that contains data                                                                         |
 | `<tr>`                       | Defines a row of cells in a table. The row's cells can then be established using a mix of `<td>` and `<th>` elements |
 | `<li>`                       | Represents an item in a list. It must be contained in a parent element: an ordered list (`<ol>`), an unordered list (`<ul>`), or a menu (`<menu>`). In menues and unordered lists, list items are usually displayed using bullet points. In ordered lists, they are usually displayed with an ascending counter on the left, such as a number or letter |
- 
-HTML Input
+| `<img>`                      | Used to embed an image in an HTML page |
+| `<a>`                        | Defines a hyperlink, which is used to link from one page to another |
+| `<link>`                     | Defines the relationship between the current document and an external resource |
+
+## General HTML Attributes
+
+Common attributes:
+
+| Attribute | Description |
+|-----------|-------------|
+| `id` | System wide identifier, unique to that element |
+| `class` | The CSS class associated with the element |
+| `style` | In line CSS |
+| `alt` | Specifies an alternate text for the image if it cannot be displayed |
+| `href` | Indicates the link's destination |
+| `rel` | Specifies the relationship between the current document and the linked document (ie. stylesheet, text/javascript)| 
+| `src` | Specifies the path to the document |
+
+## HTML Input
 
 | Element    | Meaning                          | Example                                        |
 | ---------- | -------------------------------- | ---------------------------------------------- |
@@ -1533,6 +1583,8 @@ console.log(p);
 ```
 # Javascript Template literal
 
+You can use template literals to insert JavaScript variables into strings by using the following:
+
 ```js
 function templateLiterals() {
   let name = 'amigo';
@@ -1675,6 +1727,14 @@ function displayElement(el) {
 displayElement(document);
 ```
 
+Sample Query selectors:
+
+| Selector | Description |
+|----------|--|
+| Document.getElementById() | returns one element |
+| Document.getElementsByClassName() | returns an array of elements with class name |
+| Document.getElementsByName() | returns an array of elements with the given name attribute |
+
 You can provide a CSS selector to the `querySelectorAll` function in order to select elements from the document. The `textContent` property contains all of the element's text. You can even access a textual representation of an element's HTML content with the `innerHTML` property.
 
 ```js
@@ -1753,6 +1813,22 @@ You can also add event listeners directly in the HTML. For example, here is a `o
 
 ```html
 <button onclick='alert("clicked")'>click me</button>
+```
+### Putting CSS into DOM manipulated elements
+- [MDN Element ClassLists] (https://developer.mozilla.org/en-US/docs/Web/API/Element/classList)
+
+
+You can add, remove, and test whether an element has a particular class by using the following: 
+
+```js
+  const div = document.createElement("div");
+  div.classList = "foo";
+
+  div.classList.remove("foo");
+  div.classList.add("bar");
+
+  div.classList.contains('className'); //Returns true or false
+
 ```
 
 # Promises
