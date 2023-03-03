@@ -2223,6 +2223,73 @@ coinToss
 
 Promises are the standard way to do asynchronous processing in JavaScript, but they are not the only way. The `Observer` pattern, popularized by web programming frameworks such as `Angular`, use a model called `Observer`. The major difference between Observers and Promises is that Promises immediately begin to execute when the Promise is created, but Observers form a pipeline that you then pass an execution object into. This allows Observers to be reused, and the result of executing an Observable to be saved as a history of a particular execution.
 
+My own practice
+
+```js
+const suits = ["spades", "diamonds", "clubs", "hearts"];
+const values = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"];
+
+function drawCard() {
+  const draw = newDraw();
+  pickUp(draw)
+    .then((draw) => flipCard (draw))
+    .then((draw) => displayCard(draw))
+    .catch((draw) => {
+  failue(draw);
+  });
+}
+
+function newDraw() {
+  let i = (Math.floor(Math.random() * 1000) % 13);
+  let j = (Math.floor(Math.random() * 1000) % 4);
+  const value = values[i];
+  //console.log(value);
+  const suit = suits[j];
+  ///gconsole.log(suit);
+  const listElement = document.createElement("li");
+  const myDraw = {element: listElement, val: value, su: suit};
+  listElement.innerHTML = `<span>Drawing Card...</span>`;
+  const list = document.getElementById("allCards");
+  list.appendChild(listElement);
+  return myDraw;
+}
+
+function pickUp(draw) {
+  return new Promise((resolve, reject) => {
+      handleCard(draw, 100, 400, resolve, reject, `You dropped the card`);
+  });
+}
+function handleCard(draw, min, max, resolve, reject, errMesg) {
+  let handleTime = Math.random() * (max - min) + min;
+   setTimeout(() => {
+     handleTime = Math.round(handleTime);
+     if (handleTime < max * 0.86) {
+       resolve(draw);
+     } else {
+       draw.error = errMesg;
+       reject(draw);
+     }
+   }, handleTime);
+}
+
+function flipCard(draw) {
+  return new Promise((resolve, reject) => {
+    handleCard(draw, 1000, 3000, resolve, reject, `Nothing on card :(`);
+  })
+}
+
+function displayCard(draw) {
+  draw.element.innerHTML = `<span> Your Card is the ${draw.val} of ${draw.su}`;
+}
+
+function failue(draw) {
+  draw.element.innerHTML = `Failure: ${draw.error}`;
+}
+
+
+```
+
+
 # JavaScript Async/await
 
 📖 **Suggested reading**: [MDN async function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function)
@@ -2345,6 +2412,72 @@ console.log('done');
 
 // OUTPUT: {email: 'bud@mail.com', authenticated: true}
 // OUTPUT: done
+```
+
+
+My own async/await practice:
+```js
+const suits = ["spades", "diamonds", "clubs", "hearts"];
+const values = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"];
+
+async function drawCard() {
+  const draw = newDraw();
+  try {
+    await pickUp(draw);
+    await flipCard(draw);
+    displayCard(draw);
+  } catch {
+    failue(draw);
+  }
+}
+
+function newDraw() {
+  let i = (Math.floor(Math.random() * 1000) % 13);
+  let j = (Math.floor(Math.random() * 1000) % 4);
+  const value = values[i];
+  //console.log(value);
+  const suit = suits[j];
+  //console.log(suit);
+  const listElement = document.createElement("li");
+  const myDraw = {element: listElement, val: value, su: suit};
+  listElement.innerHTML = `<span>Drawing Card...</span>`;
+  const list = document.getElementById("allCards");
+  list.appendChild(listElement);
+  return myDraw;
+}
+
+function pickUp(draw) {
+  return new Promise((resolve, reject) => {
+      handleCard(draw, 100, 400, resolve, reject, `You dropped the card`);
+  });
+}
+function handleCard(draw, min, max, resolve, reject, errMesg) {
+  let handleTime = Math.random() * (max - min) + min;
+   setTimeout(() => {
+     handleTime = Math.round(handleTime);
+     if (handleTime < max * 0.86) {
+       resolve(draw);
+     } else {
+       draw.error = errMesg;
+       reject(draw);
+     }
+   }, handleTime);
+}
+
+function flipCard(draw) {
+  return new Promise((resolve, reject) => {
+    handleCard(draw, 1000, 3000, resolve, reject, `Nothing on card :(`);
+  })
+}
+
+function displayCard(draw) {
+  draw.element.innerHTML = `<span> Your Card is the ${draw.val} of ${draw.su}`;
+}
+
+function failue(draw) {
+  draw.element.innerHTML = `Failure: ${draw.error}`;
+}
+
 ```
 
 ## JSON
