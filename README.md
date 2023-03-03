@@ -13,6 +13,7 @@ Also, Professor Jensen, a few class periods ago you mentioned that you hope I wa
 # My Project
 To ssh into the web server:
 *  `ssh -i <production key> ubuntu@<domain name>`
+
 To upload files to the web server:
 *  `<bash script> -k <production key> -h <domain name> {-s <service>}`
 
@@ -118,9 +119,6 @@ traceroute to byu.edu (128.187.16.184), 64 hops max, 52 byte packets
 If I run traceroute again I might see a slightly different route since every connection through the internet is dynamically calculated. The ability to discover a route makes the internet resilient when network devices fail or disappear from the network.
 
 ## Network internals
-The actual sending of data across the internet uses the TCP/IP model. This is a layered architecture that covers everything from the physical wires to the data that a web application sends. At the top of the TCP/IP protocol is the application layer. It represents user functionality, such as the web (HTTP), mail (SMTP), files (FTP), remote shell (SSH), and chat (IRC). Underneath that is the transport layer which breaks the application layer's information into small chunks and sends the data. The actual connection is made using the internet layer. This finds the device you want to talk to and keeps the connection alive. Finally, at the bottom of the model is the link layer which deals with the physical connections and hardware.
-## Network internals
-
 The actual sending of data across the internet uses the TCP/IP model. This is a layered architecture that covers everything from the physical wires to the data that a web application sends. At the top of the TCP/IP protocol is the application layer. It represents user functionality, such as the web (HTTP), mail (SMTP), files (FTP), remote shell (SSH), and chat (IRC). Underneath that is the transport layer which breaks the application layer's information into small chunks and sends the data. The actual connection is made using the internet layer. This finds the device you want to talk to and keeps the connection alive. Finally, at the bottom of the model is the link layer which deals with the physical connections and hardware.
 
 ### [TCP/IP](https://en.wikipedia.org/wiki/Internet_protocol_suite) layers
