@@ -260,16 +260,20 @@ The start of authority (`SOA`) record provides contact information about the own
           <li>Item3</li>         
         </ol>
         <table>
+          <thead>
           <tr>
             <th>Header1</th>
             <th>Header2</th>
             <th>Header3</th>
           </tr>
+          </thead>
+          <tbody>
           <tr>
             <td>Item1</td>
             <td>Item1</td>
             <td>Item1</td>
           </tr>
+          </tbody>
         </table>
       </main>
       <footer></footer>
@@ -2619,3 +2623,5 @@ You can either select `index.js` from the source view on the left, or press `CTR
 With the browser paused in the debugger you can move your mouse cursor over a variable to see its value, see what variables are in scope, set watches on variables, or use the console to interact with the code.
 
 This gives you complete control to inspect what the JavaScript code is doing and experiment with possible alternative directions for the code. Take some time to poke around in the debugger. Learning how to exploit its functionality will make you a much better web developer.
+
+# CS260 Midterm Review Notes:
