@@ -566,42 +566,7 @@ section {
   margin-bottom: 0.5em;
 }
 ```
-# CSS Fonts
 
-📖 **Suggested reading**: [MDN Web fonts](https://developer.mozilla.org/en-US/docs/Learn/CSS/Styling_text/Web_fonts)
-
-Choosing appropriate fonts is a key web application design characteristic. A beautiful modern font will make your application enjoyable to use. Picking a hard to read font, an overused font, or using too many fonts will turn users away.
-
-The CSS `font-family` property defines what fonts should be used. The property value represents an ordered list of fonts. The first font in the list that is available will be used. This ability to select from a list of fonts is important because different operating systems have different default fonts and your first choice may not be available.
-
-## Font families
-
-There are four major families of fonts: `Serif`, `san-serif`, `fixed`, and `symbol`. A serif is a small stroke attached to the ends of a character's major strokes. Serif fonts have the extra strokes, san-serif fonts do not. Fixed fonts characters all are the same size. This is useful for lining up text when doing things like coding or display tabular data. Symbol fonts represent non-language characters such as arrows or emojis.
-
-## Importing fonts
-
-In addition to referencing standard fonts found on the user's computer you can specify a font that you provide with your application. That way your application is guaranteed to always look the same. In order to have the browser load a font you use the `@font-face` rule and provide the font name and source location.
-
-```css
-@font-face {
-  font-family: 'Quicksand';
-  src: url('https://cs260.click/fonts/quicksand.woff2');
-}
-
-p {
-  font-family: Quicksand;
-}
-```
-
-If you do not want to host font files on your server, then you can load them from a font provider. For example, Google provides a large selection of [open source fonts](https://fonts.google.com/) that you can use without paying any royalties. The easiest way to use Google fonts is to use a CSS import statement to reference the Google Font Service. This will automatically generate the CSS for importing the font.
-
-```css
-@import url('https://fonts.googleapis.com/css2?family=Rubik Microbe&display=swap');
-
-p {
-  font-family: 'Rubik Microbe';
-}
-```
 ## Combinators
 
 Next we want to change the color of the second level headings (`h2`), but we only want to do that within the sections for each department. To make that happen we can provide a `descendant combinator` that is defined with a space delimited list of values where each item in the list is a descendant of the previous item. So our selector would be all `h2` elements that are descendants of `section` elements.
@@ -673,11 +638,57 @@ For a full description of attribute selections refer to [MDN](https://developer.
 
 CSS also defines a significant list of pseudo selectors which select based on positional relationships, mouse interactions, hyperlink visitation states, and attributes. We will give just one example. Suppose we what our purple highlight bar to appear only when the mouse hovers over the text. To accomplish this we can change our ID selector to select whenever a section is hovered over.
 
+[See full list here:](https://www.w3schools.com/css/css_pseudo_classes.asp)
+
+| Selector | Example | Example description |
+|----------|---------|---------------------|
+| :active  | a:active| selects the active link |
+| :checked | input:checked| selects every checked <input> element |
+| :disabled | input:disabled | selects every disabled <input> element |
+| :empty   | p:empty | selects every <p> element that has no children |
+| :enabled | input:enabled | selects every enabled <input> element |
+| :first-child | p:first-child | selects every <p> elements that is the first child of its parent |
+| :first-of-type | p:first-of-type | selects every <p> element that is the first <p> element of its parent |
+| :focus | input:focus | selects the <input> element that has focus |
+| :hover | a:hover | selects links on mouse over |
+| :invalid | input:invalid | selects all <input> elements with an invalid value |
+| :lang(language) | p:lang(it) | selects every <p> element with a lang attribute value starting with "it" |
+| :last-child | p:last-child | selects every <p> element that is the last child of its parent |
+| :last-of-type | p:last-of-type | selects every <p> element that is the last <p> element of its parent |
+| :link | a:link | selects all unvisited links |
+| :not(selector) | :not(p) | selects every element that is not a <p> element |
+| :nth-child(n) | p:nth-child(2) | selects every <p> element that is the second child of its parent |
+| :nth-last-of-type(n) | p:nth-last-of-type(2) | selects every <p> element that is the second <p> element of its parent, counting from the last child |
+| :nth-of-type(n) | p:nth-of-type(2) | selects every <p> element that is the second <p> element of its parent |
+| :only-of-type | p:only-of-type | selects every <p> element that is the only <p> element of its parent |
+| :only-child | p:only-child | selects every <p> element that is the only child of its parent |
+| :optional | input:optional | selects <input> elements wtih no "required" attribute |
+| :out-of-range | input:out-of-range | selects <input> elements with a value outside a specified range |
+| :read-only | input:read-only | selects <input> elements with a "readonly" attribute specified |
+| :read-write | input:read-write | selects <input> elemnts with no "readonly" attribute specified |
+| :required | input:required | selects <input> elements with a "required" attribute specified |
+| :root | root | selects the document's root element |
+| :target | #/news:target | selects the current active #/news element (clicked on a URL containing that anchor name) |
+| :valid | input:valid | selects all <input> elements with a valid value |
+| :visited | a:visited | selects all visited links |
+
+All CSS Pseudo Elements 
+| Selector | Example | Example description |
+|----------|---------|---------------------|
+| ::after | p::after | Insert content after every <p> element |
+| ::before | p::before | Insert content before every <p> element |
+| ::first-letter | p::first-letter | Selects the first letter of every <p> element |
+| ::first-line | p::first-line | Selects the first line of every <p> element |
+| ::marker | ::marker | Selects the markers of list items |
+| ::selection | p::selection | Selects the portion of an element that is selected by a user |
+
 ```css
 section:hover {
   border-left: solid 1em purple;
 }
 ```
+
+## Rule Declarations
  
  CSS rule declarations specify a property and value to assign when the rule selector matches one or more elements. There are legions of possible properties defined for modifying the style of an HTML document. For our purposes we will discuss just a few of the more commonly used ones so that you can get a feel for wide variety of functionality they represent.
 
@@ -806,7 +817,42 @@ We can use the `@media` selector to tell us which side of the screen (technicall
   }
 }
 ```
+# CSS Fonts
 
+📖 **Suggested reading**: [MDN Web fonts](https://developer.mozilla.org/en-US/docs/Learn/CSS/Styling_text/Web_fonts)
+
+Choosing appropriate fonts is a key web application design characteristic. A beautiful modern font will make your application enjoyable to use. Picking a hard to read font, an overused font, or using too many fonts will turn users away.
+
+The CSS `font-family` property defines what fonts should be used. The property value represents an ordered list of fonts. The first font in the list that is available will be used. This ability to select from a list of fonts is important because different operating systems have different default fonts and your first choice may not be available.
+
+## Font families
+
+There are four major families of fonts: `Serif`, `san-serif`, `fixed`, and `symbol`. A serif is a small stroke attached to the ends of a character's major strokes. Serif fonts have the extra strokes, san-serif fonts do not. Fixed fonts characters all are the same size. This is useful for lining up text when doing things like coding or display tabular data. Symbol fonts represent non-language characters such as arrows or emojis.
+
+## Importing fonts
+
+In addition to referencing standard fonts found on the user's computer you can specify a font that you provide with your application. That way your application is guaranteed to always look the same. In order to have the browser load a font you use the `@font-face` rule and provide the font name and source location.
+
+```css
+@font-face {
+  font-family: 'Quicksand';
+  src: url('https://cs260.click/fonts/quicksand.woff2');
+}
+
+p {
+  font-family: Quicksand;
+}
+```
+
+If you do not want to host font files on your server, then you can load them from a font provider. For example, Google provides a large selection of [open source fonts](https://fonts.google.com/) that you can use without paying any royalties. The easiest way to use Google fonts is to use a CSS import statement to reference the Google Font Service. This will automatically generate the CSS for importing the font.
+
+```css
+@import url('https://fonts.googleapis.com/css2?family=Rubik Microbe&display=swap');
+
+p {
+  font-family: 'Rubik Microbe';
+}
+```
 
 # CSS Animation
 
