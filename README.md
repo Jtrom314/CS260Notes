@@ -2695,3 +2695,58 @@ With the browser paused in the debugger you can move your mouse cursor over a va
 This gives you complete control to inspect what the JavaScript code is doing and experiment with possible alternative directions for the code. Take some time to poke around in the debugger. Learning how to exploit its functionality will make you a much better web developer.
 
 # CS260 Midterm Review Notes:
+
+## JS Promises example
+```js
+const p = new Promise((resolve, reject) => {
+  setTimeout(() => {
+    console.log('taco');
+    resolve(true);
+  }, 100000);
+});
+
+console.log('burger');
+p
+  .then((result) => console.log('shake'));
+  .catch((e) => console.log('salad'));
+  .finally(() => console.log('noodles'));
+
+console.log('fries');
+
+// OUTPUT: burger, fries, taco, shake, noodles
+```
+
+## JS Async / Await 
+```js
+const a = async function() {
+  return new Promise((resove, reject) => {
+    setTimeout(() => {console.log('D'; resolve(true)}, 10000)
+  })
+}
+
+try {
+  console.log('A');
+  await a();
+  console.log('B');
+} catch (e) {
+  console.log('C');
+}
+
+//OUTPUT: ADB
+
+```
+
+## JS Regular expression example
+
+```js
+let a = ['cow','rat','fish'];
+let b = a.filter(v => v.match(/A|f/i/));
+console.log(b);
+// OUTPUT: [rat, fish]
+```
+
+What does the DOM textContent property do?
+Sets the child text for the element
+
+Which of the following is a DNS subdomain?
+c260.cs.byu.edu
