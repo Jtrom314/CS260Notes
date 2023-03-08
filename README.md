@@ -61,6 +61,21 @@ You can also chain the input and output of commands using special characters
 | ```>>```    | Redirect output to a file. Appends if the file exists | `echo "More CS 260" >> text.txt` |
 | ```<```     | Redirect of file to input | `xxd < text.txt` | 
 
+Useful commands:
+
+Copy file to root directory
+ 
+`cp <filename> ~/`
+
+Transfer file from personal machine to remote machine
+
+`scp <filename> user@schizo.cs.byu.edu: `
+
+Transfer file from remote machine to personal machine
+
+`scp user@schizo.cs.byu.edu:<filename> .`
+
+
 # Git/GitHub
  
  The pattern:
