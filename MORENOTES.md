@@ -75,7 +75,7 @@ Your web service, Caddy, is listening on ports 80 and 443. When Caddy gets a req
 
 Internally on your web server, you can have as many web services running as you would like. However, you must make sure that each one uses a different port to communicate on. You run your Simon service on port 3000 and therefore **cannot** use port 3000 for your start up service. Instead you use port 4000 for your start up service. It does not matter what high range port you use. It only matters that you are consistent and that they are only used by one service.
 
-# HTTP
+# HTTP: Hyper text transfer protocal
 
 📖 **Suggested reading**: [MDN An overview of HTTP](https://developer.mozilla.org/en-US/docs/Web/HTTP/Overview)
 
@@ -225,7 +225,7 @@ HTTP itself is stateless. This means that one HTTP request does not know anythin
 
 ```http
 HTTP/2 200
-Set-Cookie: myAppCookie=tasty; SameSite=Strict; Secure; HttpOnly
+Set-Cookie: myAppCookie=tasty; SameSite=Strict; Secure; HttpOnly; SameSite=Strict
 ```
 
 The client then caches the cookie and returns it as an HTTP header back to the server on subsequent requests.
@@ -494,3 +494,435 @@ query {
 GraphQL helps to remove a lot of the logic for parsing endpoints and mapping requests to specific resources. Basically in GraphQL there is only one endpoint. The query endpoint.
 
 The downside of that flexibility is that the client now has significant power to consume resources on the server. There is no clear boundary on what, how much, or how complicated the aggregation of data is. It also is difficult for the server to implement authorization rights to data as they have to be baked into the data schema. However, there are standards for how to define a complex schema. Common GraphQL packages provide support for schema implementations along with database adaptors for query support.
+
+# Node.js
+
+<img src='NodeIcon.png' width='75px' />
+
+In 2009 Ryan Dahl created `Node.js`. It was the first successful application for deploying JavaScript outside of a browser. This changed the JavaScript mindset from a browser technology to one that could run on the server as well. This means that JavaScript can power your entire technology stack. One language to rule them all. Node.js is often just referred to as Node, and is currently maintained by the [Open.js Foundation](https://openjsf.org/).
+
+![Ryan Dahl](webServicesRyanDahl.jpg)
+
+> “You can never understand everything. But, you should push yourself to understand the system”
+>
+> — Ryan Dahl
+
+Browser run JavaScript using a JavaScript interpreter and execution engine. For example, Chromium based browsers all use the [V8](https://v8.dev/) engine created by Google. Node.js simply took the V8 engine and ran it inside of a console application. When you run a JavaScript program in Chrome or Node.js, it is V8 that reads your code and executes it. With either program wrapping V8, the result is the same.
+
+![Node.js](webServicesNode.jpg)
+
+## Installing NVM and Node.js
+
+Your production environment web server comes with Node.js already install. However, you will need to install Node.js in your development environment if you have not already. The easiest way to install Node.js is to first install the `Node Version Manager` (NVM) and use it to install, and manage, Node.js.
+
+### Installing on Windows
+
+If you are using Windows, then follow the installation instructions from the [windows-nvm](https://github.com/coreybutler/nvm-windows#installation--upgrades) repository. Click on `latest installer` and then scroll down to the `Assets` and download and execute nvm-setup.exe. Once the installation is complete, you will need to open a new console window so that it gets the updated path that includes NVM.
+
+In the console application install the long term support (LTS) version of Node.
+
+```sh
+➜ nvm install lts
+➜ nvm use lts
+```
+
+### Installing on Linux or MacOS
+
+If you are using Linux or MacOS then you can install NVM with the following console commands.
+
+```sh
+➜ curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
+
+➜ . ~/.nvm/nvm.sh
+```
+
+In the console application install the long term support (LTS) version of Node.
+
+```sh
+➜ nvm install --lts
+```
+
+## Checking that Node is installed
+
+The node.js console application is simply called `node`. You can verify that Node is working correctly by running node with the `-v` parameter. Note that your version might be different than what is shown here. As long as it is a LTS version you should be fine.
+
+```sh
+➜ node -v
+v18.13.0
+```
+
+## Running programs
+
+You can execute a line of JavaScript with Node.js from your console with the `-e` parameter.
+
+```sh
+➜  node -e "console.log(1+1)"
+2
+```
+
+However, to do real work you need to execute an entire project composed of dozens or even hundreds of JavaScript files. You do this by creating a single starting JavaScript file, named something like `main.js`, that references the code found in the rest your project. You then execute your code by running `node` with main.js as a parameter. For example, with the following JavaScript saved to a file named `main.js`
+
+```js
+function countdown() {
+  let i = 0;
+  while (i++ < 5) {
+    console.log(`Counting ... ${i}`);
+  }
+}
+
+countdown();
+```
+
+We can execute the JavaScript by passed the file to node, and receive the following result.
+
+```sh
+➜  node main.js
+Counting ... 1
+Counting ... 2
+Counting ... 3
+Counting ... 4
+Counting ... 5
+```
+
+You can also run node in interpretive mode by executing it without any parameters and then typing your JavaScript code directly into the interpreter.
+
+```sh
+➜ node
+Welcome to Node.js v16.15.1.
+> 1+1
+2
+> console.log('hello')
+hello
+```
+
+## Node package manager
+
+While you could write all of the JavaScript for everything you need, it is always helpful to use preexisting packages of JavaScript for implementing common tasks. To load a package using Node.js you must take two steps. First install the package locally on your machine using the Node Package Manager (NPM), and then include a `require` statement in your code that references the package name. NPM is automatically installed when you installed Node.js.
+
+NPM knows how to access a massive repository of preexisting packages. You can search for packages on the [NPM website](https://www.npmjs.com/). However, before you start using NPM to install packages you need to initialize you code to use NPM. This is done by creating a directory that will contain your JavaScript and then running `npm init`. NPM will step you through a series of questions about the project you are creating. You can press the return key for each of questions if you want to accept the defaults. If you are always going to accept all of the defaults you can use `npm init -y` and skip the Q&A.
+
+```sh
+➜  mkdir npmtest
+➜  cd npmtest
+➜  npm init -y
+```
+
+## Package.json
+
+If you list the files in directory you will notice that it has created a file named `package.json`. This file contains three main things: 1) Metadata about your project such as its name and the default entry JavaScript file, 2) commands that you can execute to do things like run, test, or distribute your code, and 3) packages that this project depends upon. With NPM initialized to work with your project, you can now use it to install a node package. As a simple example, we will install a package that knows how to tell jokes. This package is called `give-me-a-joke`. You can search for it on the [NPM website](https://www.npmjs.com/), see how often it is installed, examine the source code, and learn about who created it. You install the package using `npm install` followed by the name of the package.
+
+```sh
+➜  npm install give-me-a-joke
+```
+
+If you again examine the contents of the `package.json` file you will see a reference to the newly installed package dependency. If you decide you no longer want a package dependency you can always remove it with the `npm uninstall <package name here>` console command.
+
+⚠ Note that when you start installing package dependencies NPM will create an additional file named `package-lock.json` and a directory named `node-modules` in your project directory. The `node-modules` directory contains the actual JavaScript for the package and all of its dependent packages. As you install several packages this directory will start to get very large. You do **not** want to check this directory into your source control system since it is so large and can be rebuilt using the information contained in the `package.json` and `package-lock.json` files. So make sure you include `node-modules` in your `.gitignore` file.
+
+When you clone your source code from GitHub to a new location, just run `npm install` in the project directory. This will cause NPM to download all of the previously installed packages and recreate the `node-modules` directory. The `package-lock.json` file tracks the version of the package that you installed. That way if rebuild your `node-modules` directory you will have the version of the package you initially installed and not the latest available version, which might not be compatible with your code.
+
+With NPM and the joke package installed, you can now use the package in a JavaScript file by referencing the package name as a parameter to the `require` function. This is then followed by a call the joke object's `getRandomDadJoke` function to actually generate a joke.
+
+```js
+const giveMeAJoke = require('give-me-a-joke');
+giveMeAJoke.getRandomDadJoke((joke) => {
+  console.log(joke);
+});
+```
+
+If we run this code using node we get the following result.
+
+```sh
+➜  node main.js
+What do you call a fish with no eyes? A fsh.
+```
+
+This may seem like a lot of work but after you do it a few times it will begin to feel natural. Just remember the main steps.
+
+1. Create your project directory
+1. Initialize it for use with NPM by running `npm init -y`
+1. Make sure `.gitignore` file contains `node-modules`
+1. Install any desired packages with `npm install <package name here>`
+1. Add `require('<package name here>')` to your JavaScript code
+1. Run your code with `node main.js`
+
+## Creating a web service
+
+With JavaScript we can write code that listens on a server port (e.g. 8080), receives HTTP requests, processes them, and then responds. We can use this to create a simple web service that we then execute using Node.js.
+
+The following example first initializes the use of NPM and installs the package `http`. The http package contains the functionality for listening on server ports and manipulating HTTP requests.
+
+```sh
+➜ mkdir webservicetest
+➜ cd webservicetest
+➜ npm init -y
+➜ npm install http
+```
+
+Now we can create our HTTP server using the `http.createServer` function and provide it with a callback function that takes a request (`req`) and response (`res`) object. That function is called whenever the server receives an HTTP request. In our example, the callback always returns the same HTML snippet, with a status code of 200, and a Content-Type header, no matter what request is made. Basically this is just a simple dynamically generated HTML page. A real web service would examine the HTTP path and return meaningful content based upon the purpose of the endpoint.
+
+The `server.listen` call starts listening on port 8080 and blocks until the program is terminated.
+
+```js
+const http = require('http');
+const server = http.createServer(function (req, res) {
+  res.writeHead(200, { 'Content-Type': 'text/html' });
+  res.write('<h1>Hello Node.js!</h1>');
+  res.end();
+});
+
+server.listen(8080, () => {
+  console.log(`Web service listening on port 8080`);
+});
+```
+
+We execute the program by passing our JavaScript to Node. If the service starts up correctly then it should look like the following.
+
+```sh
+➜ node main.js
+Web service listening on port 8080
+```
+
+You can now open you browser and point it to `localhost:8080` and view the result. The interaction between the JavaScript, node, and the browser looks like this.
+
+![Node HTTP](webServicesNodeHttp.jpg)
+
+You can kill the process by pressing `CTRL-C` in the console.
+
+## Deno and Bun
+
+You should be aware that Ryan has created a successor to Node.js called [`Deno`](https://deno.land/). This version is more compliant with advances in ECMAScript and has significant performance enhancements. There are also competitor server JavaScript applications. One of the more interesting rising stars is called [`Bun`](https://bun.sh/). If you have the time you should learn about them.
+
+# Express
+
+<img src="expressIcon.png" width="75px" />
+
+📖 **Deeper dive reading**: [MDN Express/Node introduction](https://developer.mozilla.org/en-US/docs/Learn/Server-side/Express_Nodejs/Introduction)
+
+In the previous instruction you saw how to use Node.js to create a simple web server. This works great for little projects where you are trying to quickly serve up some web content, but to build a production ready application you need a framework with a bit more functionality for easily implementing a full web service. This is where the Node package `Express` come in. Express provides support for:
+
+1. Routing requests for service endpoints
+1. Manipulating HTTP requests with JSON body content
+1. Generating HTTP responses
+1. Using `middleware` to add functionality
+
+Express was created by TJ Holowaychuk and is currently maintained by the [Open.js Foundation](https://openjsf.org/).
+
+![TJ Holowaychuk](webServicesHolowaychuk.jpg)
+
+> “People tell you to not reinvent things, but I think you should … it will teach you things”
+>
+> — TJ Holowaychuk
+
+Everything in Express revolves around creating and using HTTP routing and middleware functions.
+You create an Express application by using NPM to install the Express package and then calling the `express` constructor to create the express application and listen for HTTP requests on a desired port.
+
+```sh
+➜ npm install express
+```
+
+```js
+const express = require('express');
+const app = express();
+
+app.listen(8080);
+```
+
+With the app object you can now add HTTP routing and middleware functions to the application.
+
+## Defining routes
+
+HTTP endpoints are implemented in Express by defining routes that call a function based upon an HTTP path. The Express app object supports all of the HTTP verbs as functions on the object. For example, if you want to have a route function that handles an HTTP GET request for the URL path `/store/provo` you would call the `get` method on the app.
+
+```js
+app.get('/store/provo', (req, res, next) => {
+  res.send({ name: 'provo' });
+});
+```
+
+The `get` function takes two parameters, a URL path matching pattern, and a callback function that is invoked when the pattern matches. The path matching parameter is used to match against the URL path of an incoming HTTP request.
+
+The callback function has three parameters that represent the HTTP request object (`req`), the HTTP response object (`res`), and the `next` routing function that Express expects to be called if this routing function wants another function to generate a response.
+
+The express app compares the routing function patterns in the order that they are added to the Express app object. So if you have two routing functions with patterns that both match, the first one that was added will be called and given the next matching function in the `next` parameter.
+
+In our example above we hard coded the store name to be `provo`. A real store endpoint would allow any store name to be provided as a parameter in the path. Express supports path parameters by prefixing the parameter name with a colon (`:`). Express creates a map of path parameters and populates it with the matching values found in the URL path. You then reference the parameters using the `req.params` object. Using this pattern you can rewrite our getStore endpoint as follows.
+
+```js
+app.get('/store/:storeName', (req, res, next) => {
+  res.send({ name: req.params.storeName });
+});
+```
+
+If we run our JavaScript using node we can see the result when make an HTTP request using curl.
+
+```sh
+➜ curl localhost:8080/store/orem
+{"name":"orem"}
+```
+
+If you wanted an endpoint that used the POST or DELETE HTTP verb then you just use the `post` or `delete` function on the Express app object.
+
+The route path can also include a limited wildcard syntax or even full regular expressions in path pattern. Here are a couple route functions using different pattern syntax.
+
+```js
+// Wildcard - matches /store/x and /star/y
+app.put('/st*/:storeName', (req, res) => res.send({ update: req.params.storeName }));
+
+// Pure regular expression
+app.delete(/\/store\/(.+)/, (req, res) => res.send({ delete: req.params[0] }));
+```
+
+Notice that in these examples the `next` parameter was omitted. Since we are not calling `next` we do not need to include it as a parameter. However, if you do not call next then no following middleware functions will be invoked for the request.
+
+## Using middleware
+
+📖 **Deeper dive reading**: [Express Middleware](https://expressjs.com/en/resources/middleware.html)
+
+The standard [Mediator/Middleware](https://www.patterns.dev/posts/mediator-pattern/) design pattern has two pieces: A mediator and middleware. Middleware represents componentized pieces of functionality. The mediator loads the middleware components and determines their order of execution. When a request comes to the mediator it then passes the request around to the middleware components. Following this pattern, Express is the mediator, and middleware functions are the middleware components.
+
+Express comes with a standard set of middleware functions. These provide functionality like routing, authentication, CORS, sessions, serving static web files, cookies, and logging. Some middleware functions are provided by default, and other ones must be installed using NPM before you can use it. You can also write your own middleware functions and use them with Express.
+
+A middleware function looks very similar to a routing function. That is because routing functions are also middleware functions. The only difference is that routing functions are only called if the associated pattern matches. Middleware functions are always called for every HTTP request unless a preceding middleware function does not call `next`. A middleware function has the following pattern:
+
+```js
+function middlewareName(req, res, next)
+```
+
+The middleware function parameters represent the HTTP request object (`req`), the HTTP response object (`res`), and the `next` middleware function to pass processing to. You should usually call the `next` function after completing processing so that the next middleware function can execute.
+
+![Middleware](webServicesMiddleware.jpg)
+
+### Creating your own middleware
+
+As an example of writing your own middleware, you can create a function that logs out the URL of the request and then passes on processing to the next middleware function.
+
+```js
+app.use((req, res, next) => {
+  console.log(req.originalUrl);
+  next();
+});
+```
+
+Remember that the order that you add your middleware to the Express app object controls the order that the middleware functions are called. Any middleware that does not call the next function after doing its processing, stops the middleware chain from continuing.
+
+### Builtin middleware
+
+In addition to creating your own middleware functions, you can use a built-in middleware function. Here is an example of using the `static` middleware function. This middleware responds with static files, found in a given directory, that match the request URL.
+
+```js
+app.use(express.static('public'));
+```
+
+Now if you create a subdirectory in your project directory and name it `public` you can serve up any static content that you would like. For example, you could create an `index.html` file that is the default content for your web service. Then when you call your web service without any path the index.html file will be returned.
+
+### Third party middleware
+
+You can also use third party middleware functions by using NPM to install the package and including the package in your JavaScript with the `require` function. The following uses the `cookie-parser` package to simplify the generation and access of cookies.
+
+```sh
+➜ npm install cookie-parser
+```
+
+```js
+const cookieParser = require('cookie-parser');
+
+app.use(cookieParser());
+
+app.post('/cookie/:name/:value', (req, res, next) => {
+  res.cookie(req.params.name, req.params.value);
+  res.send({ cookie: `${req.params.name}:${req.params.value}` });
+});
+
+app.get('/cookie', (req, res, next) => {
+  res.send({ cookie: req.cookies });
+});
+```
+
+It is common for middleware functions to add functionality to the `req` object so that other middleware can access their functionality. You see this happening with the cookie-parser as it adds the `cookies` object for reading and setting cookies to the `req` object.
+
+## Error handling middleware
+
+You can also add middleware for handling errors that occur. Error middleware looks similar to other middleware functions, but it takes an additional `err` parameter that contains the error.
+
+```js
+function errorMiddlewareName(err, req, res, next)
+```
+
+If you wanted to add a simple error handler for anything that might go wrong while process HTTP requests you could add the following.
+
+```js
+app.use(function (err, req, res, next) {
+  res.status(500).send({ type: err.name, message: err.message });
+});
+```
+
+We can test that our error middleware is getting used by adding a new endpoint that generates an error.
+
+```js
+app.get('/error', (req, res, next) => {
+  throw new Error('Trouble in river city');
+});
+```
+
+Now if we use curl to call our error endpoint we can see that the response comes from the error middleware.
+
+```sh
+➜ curl localhost:8080/error
+{"type":"Error","message":"Trouble in river city"}
+```
+
+## Putting it all together
+
+Here is a full example of our web service built using Express.
+
+```js
+const express = require('express');
+const cookieParser = require('cookie-parser');
+const app = express();
+
+// Third party middleware - Cookies
+app.use(cookieParser());
+
+app.post('/cookie/:name/:value', (req, res, next) => {
+  res.cookie(req.params.name, req.params.value);
+  res.send({ cookie: `${req.params.name}:${req.params.value}` });
+});
+
+app.get('/cookie', (req, res, next) => {
+  res.send({ cookie: req.cookies });
+});
+
+// Creating your own middleware - logging
+app.use((req, res, next) => {
+  console.log(req.originalUrl);
+  next();
+});
+
+// Built in middleware - Static file hosting
+app.use(express.static('public'));
+
+// Routing middleware
+app.get('/store/:storeName', (req, res) => {
+  res.send({ name: req.params.storeName });
+});
+
+app.put('/st*/:storeName', (req, res) => res.send({ update: req.params.storeName }));
+
+app.delete(/\/store\/(.+)/, (req, res) => res.send({ delete: req.params[0] }));
+
+// Error middleware
+app.get('/error', (req, res, next) => {
+  throw new Error('Trouble in river city');
+});
+
+app.use(function (err, req, res, next) {
+  res.status(500).send({ type: err.name, message: err.message });
+});
+
+// Listening to a network port
+const port = 8080;
+app.listen(port, function () {
+  console.log(`Listening on port ${port}`);
+});
+```
