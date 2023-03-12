@@ -89,6 +89,20 @@ Links are also auto-detected in text: http://www.example.com
 | Item 1    | Item 2    | Item 3    | 
 ```
 
+## Horizontal line breaks
+
+```
+Paragraph 1
+
+---
+
+Paragraph 2
+```
+
+Example:
+
+---
+
 ## Backslash escapes
 
 Certain characters can be escaped with a preceding backslash to preserve the literal display of a character instead of its special Markdown meaning. This applies to the following characters:
