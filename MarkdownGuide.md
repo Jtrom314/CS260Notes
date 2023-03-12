@@ -19,7 +19,7 @@ H2
 
 ## Paragraphs
 
-Paragraphs are separated by empty lines. To create a new paragraph, press `<return>` twice.
+Paragraphs are separated by empty lines. To create a new paragraph, press `enter` twice.
 
 ```
 Paragraph 1
@@ -35,6 +35,12 @@ Paragraph 2
 ~~Strikethrough~~
 ```
 
+Result:
+
+*Italic*
+**Bold**
+~~Strikethrough~~
+
 ## Unordered list
 
 ```
@@ -45,6 +51,15 @@ Paragraph 2
     * Item 3b
     * Item 3c
 ```
+
+Result:
+
+* Item 1
+* Item 2
+* Item 3
+   * Item 3a
+   * Item 3b
+   * Item 3c
 
 ## Ordered list
 
@@ -65,6 +80,14 @@ Paragraph 2
 > Line 3
 >> Quote within a quote
 ```
+Result:
+
+> Line 1
+> 
+> Line 3
+>> Quote wthin a quote
+
+
 ## Links to external websites
 
 ```
@@ -72,6 +95,14 @@ This is [an example](http://www.example.com) of an inline link.
 [This link](http://www.example.com "Title") has a title attribute.
 Links are also auto-detected in text: http://www.example.com
 ```
+
+Result:
+
+This is [an example](http://www.example.com) of an inline link.
+
+[This link](http://www.example.com "Title") has a title attribute.
+
+Links are also auto-detected in text: http://www.example.com
 
 ## Images
 
@@ -107,6 +138,8 @@ Example:
 
 Certain characters can be escaped with a preceding backslash to preserve the literal display of a character instead of its special Markdown meaning. This applies to the following characters:
 
+| Character | Description |
+|-----------| ------------| 
 | \\ | backslash |
 | \` | backtick |
 | \* | asterisk |
