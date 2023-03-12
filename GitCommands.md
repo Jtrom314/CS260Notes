@@ -100,3 +100,49 @@ Commit the staged content as a new commit snapshot
 
 
 ## Branch &amp; Merge
+Isolating work in branches, changing context, and integrating changes
+
+```
+git branch
+```
+
+List all branches. A \* will appear next to the currently active branch
+
+---
+
+```
+git branch [branch-name]
+```
+
+Create a new branch at the current commit
+
+---
+
+```
+git checkout
+```
+
+Switch to another branch and check it out in the working directory
+
+---
+
+```
+git merge [branch]
+```
+
+Merge the specified branch's history into the current one
+
+## Inspect &amp; Compare
+Examinging logs, diffs, and object information
+
+```
+git log
+```
+
+Show the commit history for the current active branch
+
+---
+
+```
+git
+```
