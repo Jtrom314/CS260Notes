@@ -2,7 +2,7 @@
 General Notes for CS260 for use on the final
 
 # Jusification for actions:
-Professor Jensen (Discord CS 260 Help; General; 02/17/2023) [View message here:] (https://discord.com/channels/748656649287368704/748656649287368708/1076153677422788628)
+Professor Jensen (Discord CS 260 Help; General; 02/17/2023) [View message here:](https://discord.com/channels/748656649287368704/748656649287368708/1076153677422788628)
 
 "Your start up README.md should be a big repository of everything you are discovering and want to record. Put whatever you would like in there. The midterm is 60 multiple choice questions covering the Console, Internet, HTML, CSS, and JavaScript. No time limit. Make sure you come to the in-person review on March 6th, 3 PM (JKB 3108). That should set you up for success."
 
@@ -1207,7 +1207,7 @@ The query matches the document that we previously inserted and so we get the sam
 
 There is a lot more functionality that MongoDB provides, but this is enough to get you started. If you are interested you can explore the tutorials on their [website](https://www.mongodb.com/docs/).
 
-## Keeping your keys out of your code
+### Keeping your keys out of your code
 
 You need to protect your credentials for connecting to your Mongo database. One common mistake is to check them into your code and then post it to a public GitHub repository. Instead you can load your credentials when the application executes. One common way to do that, is to read them from environment variables. The JavaScript `process.env` object provides access to the environment.
 
@@ -1223,7 +1223,7 @@ if (!userName) {
 
 Following this pattern requires you to set these variables in your development and production environments before you can successfully execute.
 
-### Setting environment variables for your **production** environment
+#### Setting environment variables for your **production** environment
 
 For your production environment, you will add your MongoDB Atlas credentials by using SSH to access your production server and modifying the `/etc/environment` file.
 
@@ -1253,7 +1253,7 @@ You then need to tell your Simon and Start Up services to use the new values fou
 pm2 restart all --update-env
 ```
 
-### Setting environment variables for your **development** environment
+#### Setting environment variables for your **development** environment
 
 For your development environment add the same environment variables. Depending on what operating system and console you are using, how you add the variables will be different.
 
@@ -1377,15 +1377,15 @@ Authorization services often use standard protocols for authenticating and autho
 
 For this course we will implement our own authentication using a simple a simple email/password design. Knowing how to implement a simple authentication design will help you appreciate what authentication services provide. If you want to experiment with different authorization services you might consider [AWS Cognito](https://aws.amazon.com/cognito/), or [Google Firebase](https://firebase.google.com/docs/auth).
 
-# Account creation and login
+## Account creation and login
 
 The first step towards supporting authentication in your web application is providing a way for users to uniquely identify themselves. This usually requires two service endpoints. One to initially `create` an authentication credential, and a second to authenticate, or `login`, on future visits. Once a user is authenticated we can control access to other endpoints. For example, web services often have a `getMe` endpoint that gives information about the currently authenticated user. We will implement this endpoint to demonstrate that authentication is actually working correctly.
 
-## Endpoint design
+### Endpoint design
 
 Using HTTP we can map out the design of each of our endpoints.
 
-### Create authentication endpoint
+#### Create authentication endpoint
 
 This takes an email and password and returns a cookie containing the authentication token and user ID. If the email already exists it returns a 409 (conflict) status code.
 
@@ -1409,7 +1409,7 @@ Set-Cookie: auth=tokenHere
 }
 ```
 
-### Login authentication endpoint
+#### Login authentication endpoint
 
 This takes an email and password and returns a cookie containing the authentication token and user ID. If the email does not exist or the password is bad it returns a 401 (unauthorized) status code.
 
@@ -1434,7 +1434,7 @@ Set-Cookie: auth=tokenHere
 
 ```
 
-### GetMe endpoint
+#### GetMe endpoint
 
 This uses the authentication token stored in the cookie to look up and return information about the authenticated user. If the token or user do not exist it returns a 401 (unauthorized) status code.
 
@@ -1490,7 +1490,7 @@ Follow these steps, and then add in the code from the sections that follow. Ther
    {"id":"user@id.com"}
    ```
 
-## Handling requests
+### Handling requests
 
 With our basic service created, we can now implement the create authentication endpoint. The first step is to read the credentials from the body of the HTTP request. Since the body is designed to contain JSON we need to tell Express that it should parse HTTP requests, with a content type of `application/json`, automatically into a JavaScript object. We do this by using the `express.json` middleware. We can then read the email and password directly out of the `req.body` object. We can test that this is working by temporarily including them in the response.
 
@@ -1572,7 +1572,7 @@ const uuid = require('uuid');
 token: uuid.v4();
 ```
 
-## Securing passwords
+### Securing passwords
 
 Next we need to securely store our passwords. Failing to do so is a major security concern. If, and it has happened to many major companies, a hacker is able to access the database, they will have the passwords for all of your users. This may not seem like a big deal if your application is not very valuable, but users often reuse passwords. That means you will also provide the hacker with the means to attack the user on many other websites.
 
@@ -1598,7 +1598,7 @@ async function createUser(email, password) {
 }
 ```
 
-## Passing authentication tokens
+#### Passing authentication tokens
 
 We now need to pass our generated authentication token to the browser when the login endpoint is called, and get it back on subsequent requests. To do this we use HTTP cookies. The `cookie-parser` package provides middleware for cookies and so we will leverage that.
 
@@ -1638,7 +1638,7 @@ function setAuthCookie(res, authToken) {
 }
 ```
 
-## Login endpoint
+### Login endpoint
 
 The login authorization endpoint needs to get the hashed password from the database, compare it to the provided password using `bcrypt.compare`, and if successful set the authentication token in the cookie. If the password does not match, or there is no user with the given email, the endpoint returns status 401 (unauthorized).
 
@@ -1656,7 +1656,7 @@ app.post('/auth/login', async (req, res) => {
 });
 ```
 
-## GetMe endpoint
+### GetMe endpoint
 
 With everything in place to create credentials and login using the credentials, we can now implement the `getMe` endpoint to demonstrate that it all actually works. To implement this we get the user object from the database by querying on the authentication token. If there is not an authentication token, or there is no user with that token, we return status 401 (unauthorized).
 
@@ -1672,7 +1672,7 @@ app.get('/user/me', async (req, res) => {
 });
 ```
 
-## Final code
+#### Final code
 
 Here is the full example code.
 
@@ -1762,7 +1762,7 @@ app.listen(port, function () {
 });
 ```
 
-## Testing it out
+### Testing it out
 
 With everything implemented we can use curl to try it out. First start up the web service from VS Code by pressing `F5` and selecting `node.js` as the debugger if you have not already done that. You can set breakpoints on all of the different endpoints to see what they do and inspect the different variables. Then open a console window and run the following curl commands. You should see similar results as what is shown below. Note that the `-c` and `-b` parameters tell curl to store and use cookies with the given file.
 
@@ -1835,13 +1835,13 @@ wss.on('connection', (ws) => {
 ```
 
 In later instruction we will show you how to run and debug this example.
-# Debugging WebSocket
+## Debugging WebSocket
 
 You can debug both sides of the WebSocket communication with VS Code to debug the server, and Chrome to debug the client. When you do this you will notice that Chrome's debugger has support specifically for working with WebSocket communication.
 
 ![WebSocket debugger](webServicesWebSocketDebugger.jpg)
 
-## Debugging the server
+### Debugging the server
 
 1. Create a directory named `testWebSocket` and change to that directory.
 1. Run `npm init -y`.
@@ -1870,7 +1870,7 @@ You can debug both sides of the WebSocket communication with VS Code to debug th
 
 ![WebSocket server debugging](webServicesWebSocketServerDebug.gif)
 
-## Debugging the client
+### Debugging the client
 
 1. Open the Chrome debugger by pressing `F12`.
 1. Paste this code into the debugger console window and press enter to execute it. Executing this code will immediately hit the server breakpoint. Take a look at what is going on and then remove the breakpoint from the server.
@@ -1892,7 +1892,7 @@ You can debug both sides of the WebSocket communication with VS Code to debug th
 1. You should see the messages in the `Messages` debugger window.
 1. Send some more messages and observe the communication back and forth without stopping on the breakpoints.
 
-# WebSocket chat
+## WebSocket chat
 
 With the understanding of what WebSockets are, the basics of using them from Node and the browser, and the ability to debug the communication, it is time to use WebSocket to build a simple chat application.
 
@@ -1900,7 +1900,7 @@ With the understanding of what WebSockets are, the basics of using them from Nod
 
 In this example we will create an HTML page that uses WebSockets and displays the resulting chat. The server will forward the WebSocket communication from the different clients.
 
-## Chat client
+### Chat client
 
 The HTML for the client provides an input for the user's name, an input for creating messages, and an element to display the messages that are sent and received.
 
@@ -2120,7 +2120,7 @@ ws.on('pong', () => {
 
 Any connection that did not response will remain in the not alive state and get cleaned up on the next pass.
 
-# Experiment
+### Experiment
 
 You can find the complete example described above in this [GitHub repository](https://github.com/webprogramming260/websocket-chat).
 
