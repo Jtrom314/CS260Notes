@@ -1453,7 +1453,7 @@ Content-Type: application/json
 
 ```
 
-## Web service
+### Web service
 
 With our service endpoints designed, we can now build our web service using Express.
 
@@ -1490,7 +1490,7 @@ Follow these steps, and then add in the code from the sections that follow. Ther
    {"id":"user@id.com"}
    ```
 
-### Handling requests
+#### Handling requests
 
 With our basic service created, we can now implement the create authentication endpoint. The first step is to read the credentials from the body of the HTTP request. Since the body is designed to contain JSON we need to tell Express that it should parse HTTP requests, with a content type of `application/json`, automatically into a JavaScript object. We do this by using the `express.json` middleware. We can then read the email and password directly out of the `req.body` object. We can test that this is working by temporarily including them in the response.
 
@@ -1527,7 +1527,7 @@ app.post('/auth/create', async (req, res) => {
 });
 ```
 
-## Using the database
+### Using the database
 
 We want to persistently store our users in Mongo and so we need to set up our code to connect to and use the database. This code is explained in the instruction on data services if you want to review what it is doing.
 
@@ -1562,7 +1562,7 @@ async function createUser(email, password) {
 
 But, we are missing a couple of things. We need to a real authentication token, and we cannot simply store a clear text password in our database.
 
-## Generating authentication tokens
+### Generating authentication tokens
 
 To generate a reasonable authentication token we use the `uuid` package. [UUID](https://en.wikipedia.org/wiki/Universally_unique_identifier) stands for Universally Unique Identifier, and it does a really good job creating a hard to guess, random, unique ID.
 
@@ -1572,7 +1572,7 @@ const uuid = require('uuid');
 token: uuid.v4();
 ```
 
-### Securing passwords
+#### Securing passwords
 
 Next we need to securely store our passwords. Failing to do so is a major security concern. If, and it has happened to many major companies, a hacker is able to access the database, they will have the passwords for all of your users. This may not seem like a big deal if your application is not very valuable, but users often reuse passwords. That means you will also provide the hacker with the means to attack the user on many other websites.
 
@@ -1638,7 +1638,7 @@ function setAuthCookie(res, authToken) {
 }
 ```
 
-### Login endpoint
+#### Login endpoint
 
 The login authorization endpoint needs to get the hashed password from the database, compare it to the provided password using `bcrypt.compare`, and if successful set the authentication token in the cookie. If the password does not match, or there is no user with the given email, the endpoint returns status 401 (unauthorized).
 
@@ -1656,7 +1656,7 @@ app.post('/auth/login', async (req, res) => {
 });
 ```
 
-### GetMe endpoint
+#### GetMe endpoint
 
 With everything in place to create credentials and login using the credentials, we can now implement the `getMe` endpoint to demonstrate that it all actually works. To implement this we get the user object from the database by querying on the authentication token. If there is not an authentication token, or there is no user with that token, we return status 401 (unauthorized).
 
@@ -1672,7 +1672,7 @@ app.get('/user/me', async (req, res) => {
 });
 ```
 
-#### Final code
+### Final code
 
 Here is the full example code.
 
