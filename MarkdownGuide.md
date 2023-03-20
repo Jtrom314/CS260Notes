@@ -153,3 +153,17 @@ Certain characters can be escaped with a preceding backslash to preserve the lit
 | \-   | hyphen |
 | \.   | dot |
 | \!   | exclamation mark |
+
+## Entity
+An HTML entity is a piece of text ("string") that begins with an ampersand (`&`) and ends with a semicolon (`;`). Entites are fequently used to display reserved characters (which would otherwise be interpreted as HTML code), and invisible characters (like non-breaking spaces). You can also use them in place of other characters that are difficult to type with a standard keyboard.
+
+### Reserved characters
+
+See a list of all reserved characters [here](https://html.spec.whatwg.org/multipage/named-characters.html#named-character-references)
+
+| Character | Entity |
+|-----------|--------|
+| `&` | `&amp;` |
+| `<` | `&lt;` |
+| `>` | `&gt;` |
+| `"` | `&quot;` |

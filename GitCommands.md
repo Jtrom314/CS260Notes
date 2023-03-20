@@ -144,5 +144,81 @@ Show the commit history for the current active branch
 ---
 
 ```
-git
+git log branchB..branchA
 ```
+
+Show the commits on branchA that are not on branchB
+
+---
+
+```
+git log --follow [file]
+```
+
+Show the commits that changed file, even across renames
+
+---
+
+```
+git diff branchB...branchA
+```
+
+Show the diff of what is in branchA that is not in branchB
+
+---
+
+```
+git show [SHA]
+```
+
+Show any object in Git in human-readable format
+
+
+## Tracking Path Changes
+Versioning file removes and path changes
+
+```
+git rm [file]
+```
+
+Delete the file from project and stage the removal for commit
+
+---
+
+```
+git mv [existing-path] [new-path]
+```
+
+Change an existing file path and stage the move
+
+---
+
+```
+git log --stat -M
+```
+
+Show all commit logs with indication of any paths that moved
+
+## Ignoring Patterns
+Preventing unintentional staging or commiting of files
+
+```
+logs/
+*.notes pattern*/
+```
+
+Save a file with desired patterns as.gitignore with either direct string matches or widcard globs
+
+---
+
+```
+git config --global core.excludefile [file]
+```
+
+System wide ignore pattern for all local repositories
+
+## Share &amp; Update
+
+## Rewrite History
+
+## Temporary commits
