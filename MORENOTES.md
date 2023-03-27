@@ -69,7 +69,7 @@ Here is a list of common port numbers that you will might come across.
 
 As an example of how ports are used we can look at your web server. When you built your web server you externally exposed port 22 so that you could use SSH to open a remote console on the server, port 443 for secure HTTP communication, and port 80 for unsecure HTTP communication.
 
-![Ports](webServicesPorts.jpg)
+![Ports](photos/webServicesPorts.jpg)
 
 Your web service, Caddy, is listening on ports 80 and 443. When Caddy gets a request on port 80, it automatically redirects the request to port 443 so that a secure connection is used. When Caddy gets a request on port 443 it examines the path provided in the HTTP request (as defined by the URL) and if the path matches a static file, it reads the file off disk and returns it. If the HTTP path matches one of the definitions it has for a gateway service, Caddy makes a connection on that service's port (e.g. 3000 or 4000) and passes the request to the service.
 
@@ -217,7 +217,7 @@ The format of the body of an HTTP request or response is defined by the `Content
 
 ## Cookies
 
-![Cookie](webServicesCookie.png)
+![Cookie](photos/webServicesCookie.png)
 
 📖 **Suggested reading**: [MDN Using HTTP cookies](https://developer.mozilla.org/en-US/docs/Web/HTTP/Cookies)
 
@@ -287,7 +287,7 @@ Notice that with CORS, it is the browser that is protecting the user from access
 
 When you make requests to your own web services you are always on the same origin and so you will not violate the SOP. However, if you want to make requests to a different domain than the one your web application is hosted on, then you need to make sure that domain allows requests as defined by the `Access-Control-Allow-Origin` header it returns. For example, if I have JavaScript in my web application loaded from `cs260.click` that makes a fetch request for an image from the website `i.picsum.photos` the browser will fail the request with an HTTP status code of 403 and an error message that CORS has blocked the request.
 
-![CORS](webServicesCors.jpg)
+![CORS](photos/webServicesCors.jpg)
 
 That happens because `i.picsum.photos` does not return an `Access-Control-Allow-Origin` header. Without a header the browser assumes that all requests must be made from the same origin.
 
@@ -375,7 +375,7 @@ When first considering your service design it is helpful to model the applicatio
 
 Once you have defined your primary objects you can create sequence diagrams that show how the objects interact with each other. This will help clarify your model and define the necessary endpoints. You can use a simple tool like [SequenceDiagram.org](https://sequencediagram.org/index.html#initialData=C4S2BsFMAIGEAsCGxqIA5oFCcQY2APYBO0AguCLpDvsdAEIEBG25lkAtAHwDKkRAN34AuPikQDEIcIiZRMjJtz6CRY1JOmz5igDy6OHFUKLC2VDVJlzq5yPsPGRDZpa03Md5fxOjgiIhRcAgA7EwBnZBBQ6AB3MHgXFj0DIx8RWFCIqJiiSABHAFdIcJQQglAAM0ockIVmb1VTUlwqNBQ7aGCw-kjQUPqlXnTTHkQAT2gAIgAJSHBwAinoQjIKKkwnIm47YVn5xeXKogIAWySgA) to create and share diagrams.
 
-![Sequence Diagram](webServicesSequenceDiagram.jpg)
+![Sequence Diagram](photos/webServicesSequenceDiagram.jpg)
 
 ## Leveraging HTTP
 
@@ -529,7 +529,7 @@ The downside of that flexibility is that the client now has significant power to
 
 In 2009 Ryan Dahl created `Node.js`. It was the first successful application for deploying JavaScript outside of a browser. This changed the JavaScript mindset from a browser technology to one that could run on the server as well. This means that JavaScript can power your entire technology stack. One language to rule them all. Node.js is often just referred to as Node, and is currently maintained by the [Open.js Foundation](https://openjsf.org/).
 
-![Ryan Dahl](webServicesRyanDahl.jpg)
+![Ryan Dahl](photos/webServicesRyanDahl.jpg)
 
 > “You can never understand everything. But, you should push yourself to understand the system”
 >
@@ -537,7 +537,7 @@ In 2009 Ryan Dahl created `Node.js`. It was the first successful application for
 
 Browser run JavaScript using a JavaScript interpreter and execution engine. For example, Chromium based browsers all use the [V8](https://v8.dev/) engine created by Google. Node.js simply took the V8 engine and ran it inside of a console application. When you run a JavaScript program in Chrome or Node.js, it is V8 that reads your code and executes it. With either program wrapping V8, the result is the same.
 
-![Node.js](webServicesNode.jpg)
+![Node.js](photos/webServicesNode.jpg)
 
 
 Three major things of node:
@@ -700,6 +700,8 @@ The following example first initializes the use of NPM and installs the package 
 ➜ npm install http
 ```
 
+### REQ &amp; RES
+
 Now we can create our HTTP server using the `http.createServer` function and provide it with a callback function that takes a request (`req`) and response (`res`) object. That function is called whenever the server receives an HTTP request. In our example, the callback always returns the same HTML snippet, with a status code of 200, and a Content-Type header, no matter what request is made. Basically this is just a simple dynamically generated HTML page. A real web service would examine the HTTP path and return meaningful content based upon the purpose of the endpoint.
 
 The `server.listen` call starts listening on port 8080 and blocks until the program is terminated.
@@ -726,7 +728,7 @@ Web service listening on port 8080
 
 You can now open you browser and point it to `localhost:8080` and view the result. The interaction between the JavaScript, node, and the browser looks like this.
 
-![Node HTTP](webServicesNodeHttp.jpg)
+![Node HTTP](photos/webServicesNodeHttp.jpg)
 
 You can kill the process by pressing `CTRL-C` in the console.
 
@@ -749,7 +751,7 @@ In the previous instruction you saw how to use Node.js to create a simple web se
 
 Express was created by TJ Holowaychuk and is currently maintained by the [Open.js Foundation](https://openjsf.org/).
 
-![TJ Holowaychuk](webServicesHolowaychuk.jpg)
+![TJ Holowaychuk](photos/webServicesHolowaychuk.jpg)
 
 > “People tell you to not reinvent things, but I think you should … it will teach you things”
 >
@@ -832,7 +834,7 @@ function middlewareName(req, res, next)
 
 The middleware function parameters represent the HTTP request object (`req`), the HTTP response object (`res`), and the `next` middleware function to pass processing to. You should usually call the `next` function after completing processing so that the next middleware function can execute.
 
-![Middleware](webServicesMiddleware.jpg)
+![Middleware](photos/webServicesMiddleware.jpg)
 
 ### Creating your own middleware
 
@@ -1083,7 +1085,7 @@ If you run `pm2 ls` again you should see your web service listed. You can now ac
 
 Web applications commonly need to store application and user data persistently. The data can be many things, but it is usually a representation of complex interrelated objects. This includes this like a user profile, organizational structure, game play information, usage history, billing information, peer relationship, library catalog, and so forth.
 
-![Data service](dataService.jpg)
+![Data service](photos/dataService.jpg)
 
 Historically SQL databases have served as the general purpose data service solution, but starting around 2010 specialty data services that better support document, graph, JSON, time, sequence, and key-value pair data began to take significant roles in applications from major companies. These data services are often called NoSQL solutions because they do not use the general purpose relational database paradigms popularized by SQL databases. However, they all have very different underlying data structures, strengths, and weaknesses. That means that you should not simply split all of the possible data services into two narrowly defined boxes, SQL and NoSQL, when you are considering the right data service for your application.
 
@@ -1101,7 +1103,7 @@ Here is a list of some of the popular data services that are available.
 
 ## MongoDB
 
-![MongoDB logo](webServicesMongoLogo.png)
+![MongoDB logo](photos/webServicesMongoLogo.png)
 
 For the projects in this course that require data services, we will use `MongoDB`. Mongo increases developer productivity by using JSON objects as its core data model. This makes it easy to have an application that uses JSON from the top to the bottom of the technology stack. A mongo database is made up of one or more collections that each contain JSON documents. You can think of a collection as a large array of JavaScript objects, each with a unique ID. The following is a sample of a collection of houses that are for rent.
 
@@ -1286,7 +1288,9 @@ For your development environment add the same environment variables. Depending o
 
 **`Mac` (Zsh)**
 
+1. If there isn' a ~/.zprofile, create one following the tutorial found [here](https://www.insightsjava.com/2022/01/how-to-create-bash-profile-on-mac.html)
 1. Modify ~/.zprofile
+  1. Make sure the keyword `export` is placed before each variable name 
 
 **`Windows`**
 
@@ -1307,7 +1311,7 @@ Historically each application development team would have developers that manage
 
 All of the major cloud providers offer multiple data services. For this class we will use the data service provided by MongoDB called [Atlas](https://www.mongodb.com/atlas/database). No credit card or payment is required to setup and use Atlas, as long as you stick to the shared cluster environment.
 
-[![Mongo sign up](webServicesMongoSignUp.jpg)](https://www.mongodb.com/atlas/database)
+[![Mongo sign up](photos/webServicesMongoSignUp.jpg)](https://www.mongodb.com/atlas/database)
 
 This [video tutorial](https://www.youtube.com/watch?v=daIH4o75KE8) will step you through the process of creating your account and setting up your database. Note that some of the Atlas website interface may be slightly different, but the basic concepts should all be there is some shape or form. The main steps you need to take are:
 
@@ -1320,7 +1324,7 @@ This [video tutorial](https://www.youtube.com/watch?v=daIH4o75KE8) will step you
 
 You can always find the connection string to your Atlas cluster by pressing the `Connect` button from your Database > DataServices view.
 
-![Atlas connection string](webServicesMongoConnection.gif)
+![Atlas connection string](photos/webServicesMongoConnection.gif)
 
 With that all done, you should be good to use Atlas from both your development and production environments. You can test that things are working correctly with the following example.
 
@@ -1386,11 +1390,11 @@ beds: 1
 
 If your application is going to remember a user's data then it will need a way to uniquely associate the data with a particular credential. That usually means that you `authenticate` a user by asking for information, such as an email address and password. You then remember, for some period of time, that the user has authenticated by storing an `authentication token` on the user's device. Often that token is stored in a [cookie](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cookie) that is passed back to your web service on each request. The service can now associate data that the user supplies with a unique identifier that corresponds to their authorization token.
 
-![authentication](authServiceAuthenticate.jpg)
+![authentication](photos/authServiceAuthenticate.jpg)
 
 Determining what a user is `authorized` to do in your application is also important. For example, you might have different roles in your application such as Administrators, Editors, and Customers. Once you have the ability to authenticate a user and store information about that user, you can also store the authorization for the user. A simple application might have a single field that represents the role of the user. The service code would then use that role to allow, limit, or prevent what a service endpoint does. A complex web application will usually have very powerful authorization representation that controls the user's access to every part of the application. For example, an Editor role might have authorization only to work on content that they created or were invited to.
 
-![authorize](authServiceAuthorize.jpg)
+![authorize](photos/authServiceAuthorize.jpg)
 
 As you might imagine, authentication and authorization can become very complex, very quickly. It is also a primary target for a hacker. If they can bypass the authentication or escalate what they are authorized to do then they can gain control of your application. Additionally, constantly forcing users to authenticate in a secure way causes users to not want to use an application. This creates opposing priorities. Keep the system secure or make it easy to use.
 
@@ -1806,7 +1810,7 @@ With everything implemented we can use curl to try it out. First start up the we
 ```
 # WebSocket
 
-![webSocket](webServicesWebSocketsLogo.png)
+![webSocket](photos/webServicesWebSocketsLogo.png)
 
 HTTP is based on a client server architecture. A client always initiates the request and the server responds. This is great if you are building a global document library connected by hyperlinks, but for many other use cases it just doesn't work. Applications for notifications, distributed task processing, peer to peer communication, or asynchronous events need communication that is initiated by two or more connected devices.
 
@@ -1814,11 +1818,11 @@ For years, web developers created hacks to worked around the limitation of the c
 
 Finally, in 2011 the communication protocol WebSocket was created to solve this problem. The core feature of WebSocket is that it is fully duplexed. Meaning that after the initial connection is made from a client, using vanilla HTTP, and then upgraded by the server to a WebSocket connection, the relationship changes to a peer to peer connection where either party can efficiently send data at any time.
 
-![WebSocket Upgrade](webServicesWebSocketUpgrade.jpg)
+![WebSocket Upgrade](photos/webServicesWebSocketUpgrade.jpg)
 
 WebSocket connections are still only between two parties. So if you want to facilitate a conversation between a group of users the server must act as the intermediary. Each peer first connects to the server, and then the server forwards messages amongst the peers.
 
-![WebSocket Peers](webServicesWebSocketPeers.jpg)
+![WebSocket Peers](photos/webServicesWebSocketPeers.jpg)
 
 ## Creating a WebSocket conversation
 
@@ -1862,7 +1866,7 @@ In later instruction we will show you how to run and debug this example.
 
 You can debug both sides of the WebSocket communication with VS Code to debug the server, and Chrome to debug the client. When you do this you will notice that Chrome's debugger has support specifically for working with WebSocket communication.
 
-![WebSocket debugger](webServicesWebSocketDebugger.jpg)
+![WebSocket debugger](photos/webServicesWebSocketDebugger.jpg)
 
 ### Debugging the server
 
@@ -1891,7 +1895,7 @@ You can debug both sides of the WebSocket communication with VS Code to debug th
 1. Set breakpoints on the `ws.send` lines so you can inspect the code executing.
 1. Start debugging by pressing `F5`. The first time you may need to choose Node.js as the debugger.
 
-![WebSocket server debugging](webServicesWebSocketServerDebug.gif)
+![WebSocket server debugging](photos/webServicesWebSocketServerDebug.gif)
 
 ### Debugging the client
 
@@ -1919,7 +1923,7 @@ You can debug both sides of the WebSocket communication with VS Code to debug th
 
 With the understanding of what WebSockets are, the basics of using them from Node and the browser, and the ability to debug the communication, it is time to use WebSocket to build a simple chat application.
 
-![WebSocket Peers](webServicesWebSocketPeers.jpg)
+![WebSocket Peers](photos/webServicesWebSocketPeers.jpg)
 
 In this example we will create an HTML page that uses WebSockets and displays the resulting chat. The server will forward the WebSocket communication from the different clients.
 
@@ -2153,3 +2157,130 @@ You can find the complete example described above in this [GitHub repository](ht
 1. Run and debug the example by pressing `F5`. You may need to select node.js as the debugger the first time you run.
 1. Open multiple browser windows and point them to http://localhost:3000 and start chatting.
 1. Use the browser's debugger to view the WebSocket communication.
+
+# Web frameworks
+
+📖 **Deeper dive reading**: [MDN Introduction to client-side frameworks](https://developer.mozilla.org/en-US/docs/Learn/Tools_and_testing/Client-side_JavaScript_frameworks/Introduction)
+
+Web frameworks seek to make the job of writing web applications easier by providing tools for completing common application tasks. This includes things like modularizing code, creating single page applications, simplifying reactivity, and supporting diverse hardware devices.
+
+Some frameworks take things beyond the standard web technologies (HTML, CSS, JavaScript) and create new hybrid file formats that combine things like HTML and JavaScript into a single file. Examples of this include React JSX, Vue SFC, and Svelte files. Abstracting away the core web file formats puts the focus on functional components rather than files.
+
+There are lots of web frameworks to choose from and they evolve all the time. You can view the latest popularity poll at [StateOfJS](https://stateofjs.com).
+
+![web frameworks](stateofjs-webframeworks.jpg)
+
+\- **Source**: _StateOfJS web framework poll_
+
+Each framework has advantages and disadvantages. Some are very perscriptive (opinionated) about how to do things, some have major institutional backing, others have a strong open source community. Other factors you want to consider include how easy it is to learn, how it impacts productivity, how performant it is, how long it takes to build, and how actively the framework is evolving.
+
+## Hello world examples
+
+For our classwork we will use the web framework React. However, before we dig into React let's look at how the major frameworks would render a simple hello world application.
+
+### Vue
+
+[Vue](https://vuejs.org/) combines HTML, CSS, and JavaScript into a single file. HTML is represented by a `template` element that can be aggregated into other templates.
+
+**SFC**
+
+```html
+<script>
+  export default {
+    data() {
+      return {
+        name: 'world',
+      };
+    },
+  };
+</script>
+
+<style>
+  p {
+    color: green;
+  }
+</style>
+
+<template>
+  <p>Hello {{ name }}!</p>
+</template>
+```
+
+### Svelte
+
+Like Vue, [Svelte](https://svelte.dev/) combines HTML, CSS, and JavaScript into a single file. The difference here is that Svelte requires a transpiler to generate browser ready code, instead of a runtime virtual DOM.
+
+**Svelte file**
+
+```html
+<script>
+  let name = 'world';
+</script>
+
+<style>
+  p {
+    color: green;
+  }
+</style>
+
+<p>Hello {name}!</p>
+```
+
+### React
+
+React combines JavaScript and HTML into its component format. CSS must be declared outside of the JSX file. The component itself highly leverages the functionality of JavaScript and can be represented as a function or class.
+
+**JSX**
+
+```jsx
+import 'hello.css';
+
+const Hello = () => {
+  let name = 'world';
+
+  return <p>Hello {name}</p>;
+};
+```
+
+**CSS**
+
+```css
+p {
+  color: green;
+}
+```
+
+### Angular component
+
+An Angular component defines what JavaScript, HTML, and CSS are combined together. This keeps a fairly strong separation of files what are usually grouped together in a directory rather than using the single file representation.
+
+**JS**
+
+```js
+@Component({
+  selector: 'app-hello-world',
+  templateUrl: './hello-world.component.html',
+  styleUrls: ['./hello-world.component.css'],
+})
+export class HelloWorldComponent {
+  name: string;
+  constructor() {
+    this.name = 'world';
+  }
+}
+```
+
+**HTML**
+
+```html
+<p>hello {{name}}</p>
+```
+
+**CSS**
+
+```css
+p {
+  color: green;
+}
+```
+

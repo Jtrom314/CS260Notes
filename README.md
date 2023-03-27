@@ -52,6 +52,7 @@ The other primary purpose of the console is to execute commands. You already did
 | tracert | trace the connections to a website               |
 | dig     | show the DNS information for a domain            |
 | man     | Look up a command in the manual                  |
+| chmod   | Change read, write, execute permissions for different users | 
 
 You can also chain the input and output of commands using special characters
 | Opperator | Explanation | Example |
@@ -1668,6 +1669,10 @@ The Array object has several interesting static functions associated with it. He
 | filter   | Run a function to remove items                            | `a.filter(i => i%2)`          |
 | every    | Run a function to test if all items match                 | `a.every(i => i < 3)`         |
 | some     | Run a function to test if any items match                 | `a.some(i => 1 < 1)`          |
+| at       | Returns the element at the index given                    | `a.at(i)`                     |
+| fill     | Fills the array with the given element                    | `a.fill(1)`                   |
+| includes | Returns a boolean value depending on if item is in the array | `a.includes(1)`            |
+| findIndex | Returns the index of the given element in the array      | `a.findIndex(2)`              |
 
 ```js
 const a = [1, 2, 3];
@@ -2180,6 +2185,15 @@ There are lots of possible events that you can add a listener to. This includes 
 | Keyboard       | Keys are pressed      |
 | Mouse          | Click events          |
 | Text selection | When text is selected |
+
+Some DOM Events:
+
+| Mouse | Keyboard | Form |
+| ----- | ---------| ---- |
+| onclick | onkeydown | onchange |
+| onmouseover | onkeyup | onfocus |
+| onmouseout | onkeypress | onblur |
+|  |  | oninput |
 
 You can also add event listeners directly in the HTML. For example, here is a `onclick` handler that is attached to a button.
 
