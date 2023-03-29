@@ -2629,3 +2629,1121 @@ const Demo = ({ who, initialColor }) => {
   );
 };
 ```
+### React hooks
+
+📖 **Recommended reading**: [Reactjs.org - Hooks Overview](https://reactjs.org/docs/hooks-overview.html)
+
+React hooks allow React function style components to be able to do everything that a class style component can do and more. Additionally, as new features are added to React they are including them as hooks. This makes function style components the preferred way of doing things in React. You have already see one use of hooks to declare and update state in a function component with the `useState` hook.
+
+```jsx
+function Clicker({ initialCount }) {
+  const [count, updateCount] = React.useState(initialCount);
+  return <div onClick={() => updateCount(count + 1)}>Click count: {count}</div>;
+}
+
+ReactDOM.render(<Clicker initialCount={3} />, document.getElementById('root'));
+```
+
+#### useEffect hook
+
+The `useEffect` hook allows you to represent lifecycle events. For example, if you want run a function every time the component completes rendering, you could do the following.
+
+```jsx
+function UseEffectHookDemo() {
+  React.useEffect(() => {
+    console.log('rendered');
+  });
+
+  return <div>useEffectExample</div>;
+}
+
+ReactDOM.render(<UseEffectHookDemo />, document.getElementById('root'));
+```
+
+You can also take action when the component cleans up by returning a cleanup function from the function registered with `useEffect`. In the following example, every time the component is clicked the state changes and so the component is rerendered. This causes both the cleanup function to be called in addition to the hook function. If the function was not rerendered then only the cleanup function would be called.
+
+```jsx
+function UseEffectHookDemo() {
+  const [count, updateCount] = React.useState(0);
+  React.useEffect(() => {
+    console.log('rendered');
+
+    return function cleanup() {
+      console.log('cleanup');
+    };
+  });
+
+  return <div onClick={() => updateCount(count + 1)}>useEffectExample {count}</div>;
+}
+
+ReactDOM.render(<UseEffectHookDemo />, document.getElementById('root'));
+```
+
+This is useful when you want to create side effects for things such as tracking when a component is displayed or hidden, or creating and disposing of resources.
+
+#### Hook dependencies
+
+You can control what triggers a `useEffect` hook by specifying its dependencies. In the following example we have two state variables, but we only want the `useEffect` hook to be called when the component is initially called and when the first variable is clicked. To accomplish this you pass an array of dependencies as a second parameter to the `useEffect` call.
+
+```jsx
+function UseEffectHookDemo() {
+  const [count1, updateCount1] = React.useState(0);
+  const [count2, updateCount2] = React.useState(0);
+
+  React.useEffect(() => {
+    console.log(`count1 effect triggered ${count1}`);
+  }, [count1]);
+
+  return (
+    <ol>
+      <li onClick={() => updateCount1(count1 + 1)}>Item 1 - {count1}</li>
+      <li onClick={() => updateCount2(count2 + 1)}>Item 2 - {count2}</li>
+    </ol>
+  );
+}
+
+ReactDOM.render(<UseEffectHookDemo />, document.getElementById('root'));
+```
+
+If you specify and empty array `[]` as the hook dependency then it is only called when the component is first rendered.
+
+Note that hooks can only be used in function style components and must be called at the top scope of the function. That means a hook cannot be called inside of a loop or conditional. This restriction ensures that hooks are always called in the same order when a component is rendered.
+
+# React CLI
+
+🔑 **Required reading**: [Create React App Getting Started](https://create-react-app.dev/docs/getting-started)
+
+Now that we have covered the basics of React, we want to extend our usage to include a full web framework toolchain that allows us to use JSX, minification, polyfills, and bundling for our Simon and start up applications. One common way for configuring your project to take advantage of these technologies is to use a Command Line Interface (CLI) to initially set up a React based project.
+
+A CLI is a program that runs from the console and usually provides an assortment of commands related to some specific purpose. For example, the [AWS CLI](https://aws.amazon.com/cli/) allows you to interact with all of its services. This saves you the time of having to bring up the AWS website interface when you want to use an AWS service. Instead of opening a browser, logging in, navigating to a service, and walking through a bunch of UI dialogs, you simply open your console window and use the AWS CLI to execute a single command.
+
+To set up our React toolchain we will use the `create-react-app` CLI. This CLI will create and configure a template React application that you can use as a starting place for your application. `create-react-app` is an NPM package that works as a console program. Previously you used npm packages to add code libraries to your applications, but you can also run NPM packages as if they were a console program, if they are [configured](https://blog.npmjs.org/post/118810260230/building-a-simple-command-line-tool-with-npm.html) to do so.
+
+The common way to run CLI NPM programs is to use the `NPX` program that was included when you installed NPM. NPX will temporarily download the desired package from NPM and then execute it using Node. Basically, NPX is just a short cut for `NPM install` and `NPM start`. It also has the advantage of not actually persistently installing the package and so it doesn't leave any clutter behind in your development environment.
+
+When you run `create-react-app` with NPX, it creates a brand new React application project based on a standard template. You can see how this works by running the following from your console window. Make sure you are in a directory where you keep your coding projects. For example, `cd ~/src/byu/cs260`.
+
+```sh
+npx create-react-app test-react
+```
+
+When this runs it will create a project directory named `test-react`, create a bunch of project template files, and install the NPM packages necessary to use React and the associated toolchain. You can examine the project it created by changing into the `test-react` directory and opening VS Code.
+
+```sh
+cd test-react
+code .
+```
+
+Before we look at what the generated project contains, let's run the application and see what it does. From the `test-react` directory run `npm start`.
+
+```sh
+➜  npm start
+
+Compiled successfully!
+
+You can now view test-react in the browser.
+
+  Local:            http://localhost:3000
+```
+
+This should automatically launch the application and open your browser to display the application running on port 3000.
+
+![React CLI Application](reactCliApp.png)
+
+To stop the application, use the `CTRL-C` (kill) keystroke in the console window where you started it.
+
+Congratulations you have just used a CLI to create a React based web application. Time for cookies.
+
+## Generated project
+
+Let's examine the file and directory structure that `create-react-app` created.
+
+| Directory | File               | Purpose                                                      |
+| --------- | ------------------ | ------------------------------------------------------------ |
+| ./        | .gitignore         | Specifies files to not include in your Git commits           |
+|           | package-json       | NPM definition for included packages and script commands     |
+|           | package-lock.json  | Version constraints for included packages (do not edit this) |
+|           | README.md          | GitHub readme for the project                                |
+| ./public  | index.html         | Primary page for the application                             |
+|           | favicon.ico        | Primary application icon                                     |
+|           | logo\*.png         | Icons used for mobile devices                                |
+|           | manifest.json      | Configuration for use on mobile devices (PWA support)        |
+|           | robots.txt         | Directives for search engine crawlers like Google            |
+| ./src     | index.js           | Entry point for code execution                               |
+|           | index.css          | CSS for top level component                                  |
+|           | App.css            | CSS for the main application component                       |
+|           | App.js             | JavaScript for the main application component                |
+|           | App.test.js        | Automated tests for the main application component           |
+|           | logo.svg           | Image displayed in the main application component            |
+|           | reportWebVitals.js | Configuration for reporting application performance          |
+|           | setupTests.js      | Set up for automated tests                                   |
+
+At a high level `create-react-app` did the following:
+
+1. Updated `./package-json` to include the necessary NPM packages for running and testing a React application.
+1. Created `./public/index.html` as the entry point for the browser to load your application
+1. Created `./src/index.js` to initialize the React application
+1. Created `./src/app.js` to provide the top level React component
+
+All the other files provide styling, use on mobile devices, testing, and performance monitoring.
+
+## Digging into the generated code
+
+When the browser requests to load your application it gets `index.html` by default. `index.html` contains the basic metadata for the application, but the actual content is injected into the HTML, at runtime, based upon the code contained in `index.js`. This happens because React by default will look for a file named `index.js` and execute it. The `index.js` file contains code that looks for a `div` element named `root` and renders the App component into that div. This causes the `App` component to be loaded from `App.js` which finally provides the content that you see visualized in the browser.
+
+![React flow](reactCliFlow.png)
+
+From this basic template code, you can build your application by replacing the App component, adding new React child components to the App component, and introducing a React router.
+
+## What the toolchain is doing
+
+When you run `npm start` it executes the `start` script found in `package.json`.
+
+```json
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+  }
+```
+
+This runs another NPM CLI package called `react-scripts` and tells it to build the application from the code and launch it with a development HTTP server similar to the Live Server extension you have been using in VS Code. `react-scripts` then launches your browser and points it to `localhost:3000` where you can see the application rendering. Note that the development HTTP server will monitor changes to the application source and automatically rebuild it. Try this out by starting the application, editing the `App.js` file to contain something different, saving it, and looking at the browser window displaying the application.
+
+![React CLI reload](reactCliReload.gif)
+
+When `react-scripts` builds the application it converts the React JSX files to valid JavaScript and populates the `index.html` file with references to the generated files. If you look at `index.html` in your project, you will see that it contains a fairly bare bones HTML page.
+
+**Template version of index.html**
+
+```html
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <meta name="description" content="Web site created using create-react-app" />
+    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+    <title>React App</title>
+  </head>
+  <body>
+    <div id="root"></div>
+  </body>
+</html>
+```
+
+If you start the application, and use the browser's debugger to look at the actual HTML loaded into the DOM you will see the result of the toolchain manipulation and bundling. (Note that this code has been abbreviated for clarity of the example.) Our `index.html` file now has injected file paths, JavaScript for running the React web framework in the browser, CSS elements for the currently rendered components, and the transpiled component HTML from the React components.
+
+**DOM version of index.html**
+
+```html
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <!-- path for public files in injected -->
+    <link rel="icon" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <meta name="description" content="Web site created using create-react-app" />
+    <link rel="apple-touch-icon" href="/logo192.png" />
+    <link rel="manifest" href="/manifest.json" />
+    <title>React App</title>
+    <!-- The minified JavaScript for using React as the web framework -->
+    <script defer="" src="/static/js/bundle.js"></script>
+    <!-- CSS styles are inserted from the component CSS. -->
+    <style>
+      body {
+        margin: 0;
+        font-family: 'Roboto', 'Oxygen', 'Ubuntu', sans-serif;
+      }
+      .App {
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Root application JSX transpiled and inserted -->
+    <div id="root">
+      <!-- Application component JSX transpiled and inserted -->
+      <div class="App">
+        <header class="App-header">
+          <img src="/static/media/logo.6ce24c58023cc2f8fd88fe9d219db6c6.svg" class="App-logo" alt="logo" />
+          <p>Edit <code>src/App.js</code> and save to reload.</p>
+          <a class="App-link" href="https://reactjs.org" target="_blank" rel="noopener noreferrer">Learn React</a>
+        </header>
+      </div>
+    </div>
+  </body>
+</html>
+```
+
+## Modifying the generated project
+
+There is nothing that `create-react-app` does that you should consider off limits for change or improvement. If you take the time to understand what it is doing and why, then you should feel free to customize the application to how you would like it to work. At a basic level you should always do the following:
+
+1. Replace the icon files with your own icons
+1. Modify the manifest.json and package.json to contain your application name
+1. Modify the README.md to describe your application
+1. Modify index.html to contain a proper title and description metadata.
+
+### Removing testing and performance monitoring
+
+As an example of more extension modifications, we can remove the testing and performance packages that `create-react-app` included in the template. You might do this because you are trying to simplify the project for demonstration purposes, or because you want to replace it with a different testing framework such as Playwright.
+
+To make this change, we first use NPM to **uninstall** the `@testing-library` packages. This removes the packages from `package.json` so that they are no longer installed in `node_modules` when your run `npm install`.
+
+```sh
+npm uninstall @testing-library/jest-dom @testing-library/react @testing-library/user-event
+```
+
+Next delete the test JavaScript files `setupTest.js` and `App.test.js`. With the testing packages gone, nothing will call this code and so we can simply delete it.
+
+```sh
+rm src/setupTests.js src/App.test.js
+```
+
+We can also remove the performance reporting package and code in order to simplify our application even further.
+
+```sh
+npm uninstall web-vitals
+rm src/reportWebVitals.js
+```
+
+Finally, we remove the references to `reportWebVitals` from `index.js` since that package is no longer available.
+
+**index.js**
+
+```js
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import './index.css';
+import App from './App';
+// -> Delete
+// import reportWebVitals from './reportWebVitals';
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>
+);
+
+// -> Delete
+// reportWebVitals();
+```
+
+If we run `npm start` again the application will run the same as before, but without testing or performance monitoring support. You can now insert a different package for these vital functions if you so desire.
+
+If you want to strip the project down even more, you can also delete the robots.txt, manifest.json, and the logo\*.png files.
+
+Temporarily deleting code is sometimes a good strategy to use when trying to learn how the code works. If everything is committed to Git then you can easily do experiments like this.
+
+### JSX vs JS
+
+The `create-react-app` CLI uses the `.js` (JavaScript) extension for JSX files instead of `.jsx`. The Babel transpiler will work with either one, but some editor tools will work differently based upon the extension. For this reason, you might consider renaming the `.js` files that actually contain JSX to use `.jsx` instead. The developers at AirBNB had an interesting [conversation](https://github.com/airbnb/javascript/pull/985) on this topic that you might browse if you would like to consider the differing opinions on this subject.
+
+## Building a production release
+
+Now that you have your React application the way that you like you need to build a production ready release. You do this by running `npm run build`. The executes the `build` script found in your `package.json`. The `build` script transpiles, minifies, and injects the proper JavaScript, and then outputs everything to a deployment ready version contained in a subdirectory named `build`.
+
+```sh
+➜  npm run build
+
+Creating an optimized production build...
+Compiled successfully.
+```
+
+The deployment scripts for Simon React creates a distribution package by calling `npm run build` and then copying the `build` directory out to your production server.
+
+## Other React project generators
+
+The `create-react-app` CLI is not the only tool that you can use to generate a templated React project. For example, there is also `nano-react-app`, that uses [Vite](https://vitejs.dev/) instead of [webpack](https://webpack.js.org/), and results in a very minimal collection of template files. If you are comfortable with what `create-react-app` is doing, then you might experiment with some of the other CLI alternatives. Otherwise, just stick with `create-react-app` for now.
+
+# Router
+
+🔑 **Required reading**: [React Router DOM Tutorial](https://blog.webdevsimplified.com/2022-07/react-router/)
+
+A web framework router provides essential functionality for single page applications. With a multiple web page application the headers, footers, navigation, and common components must be either duplicated in each HTML page, or injected before the server sends the page to the browser. With a single page application the browser only loads one HTML page and then JavaScript is used to manipulate the DOM and give it the appearance of multiple pages. The router defines the routes a user can take through the application, and automatically manipulates the DOM to display the appropriate framework components.
+
+React does not have a standard router package, and there are many that you can choose from. We will use [react-router-dom](https://www.npmjs.com/package/react-router-dom) Version 6. The simplified routing functionality of React-router-dom derives from the project [react-router](https://www.npmjs.com/package/react-router) for its core functionality. Do not confuse the two, or versions of react-router-dom before version 6, when reading tutorials and documentation.
+
+<img src="reactRouter.jpg">
+
+A basic implementation of the router consists of a `BrowserRouter` component that encapsulates the entire application and controls the routing action. The `Link` component captures user navigation events and modifies what is rendered by the `Routes` component by matching up the `to` and `path` attributes.
+
+```jsx
+// Inject the router into the application root DOM element
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(
+  // BrowserRouter component that controls what is rendered
+  // NavLink component captures user navigation requests
+  // Routes component defines what component is routed to
+  <BrowserRouter>
+    <div className='app'>
+      <nav>
+        <NavLink to='/'>Home</Link>
+        <NavLink to='/about'>About</Link>
+        <NavLink to='/users'>Users</Link>
+      </nav>
+
+      <main>
+        <Routes>
+          <Route path='/' element={<Home />} exact />
+          <Route path='/about' element={<About />} />
+          <Route path='/users' element={<Users />} />
+          <Route path='*' element={<Navigate to='/' replace />} />
+        </Routes>
+      </main>
+    </div>
+  </BrowserRouter>
+);
+```
+# Security overview
+
+📖 **Deeper dive reading**:
+
+- [Database of publicized software vulnerabilities](https://cve.mitre.org/)
+- [SQL Injection](https://portswigger.net/web-security/sql-injection)
+
+The internet allows us to socially connect, conduct financial transactions, and provide access to sensitive individual, corporate, and government data. It is also accessible from every corner of the planet. This positions the internet as a tool that can make the world a much better place, but it also makes a very attractive target for those who would seek to do harm. Preventing that potential for harm needs to be in the forefront of you mind whenever you create or use a web application.
+
+You can see bad actors at work on your very own server by using `ssh` to open a console to your server and reviewing the authorization log. The authorization log captures all of the attempts to create a session on your server.
+
+```sh
+sudo less +G /var/log/auth.log
+```
+
+The last entry in the log will be from your connection to the server.
+
+```sh
+Feb 23 16:26:54 sshd[319071]: pam_unix(sshd:session): session opened for user ubuntu(uid=1000) by (uid=0)
+Feb 23 16:26:54 systemd-logind[480]: New session 1350 of user ubuntu.
+Feb 23 16:26:54 systemd: pam_unix(systemd-user:session): session opened for user ubuntu(uid=1000) by (uid=0)
+```
+
+However, you will see lots of other attempts with specific user names associated with common exploits. These all should be failing to connect, but if your server is not configured properly then an unauthorized access is possible. The sample of attempts below show the IP addresses of the attacker, as well as the user name that they used. Using the `whois` utility we can see that these attacks are originating from servers at DLive.kr in Korea, and DigitalOcean.com in the USA.
+
+```sh
+Feb 19 02:34:28 sshd[298185]: Invalid user developer from 27.1.253.142
+Feb 19 02:37:12 sshd[298193]: Invalid user minecraft1 from 27.1.253.142
+Feb 23 14:26:19 sshd[318868]: Invalid user siteadmin 174.138.72.191
+Feb 23 14:22:18 sshd[318845]: Invalid user tester 174.138.72.191
+```
+
+As an experiment, one of our TAs created a test server with a user named `admin` with password `password`. Within 15 minutes, an attacker had logged in, bypassed all the restrictions that were in place, and started using the server to attack other servers on the internet.
+
+Even if you don't think your application is valuable enough to require security, you need to consider that you might be creating a security problem for your users on other systems. For example, think about a simple game application where a user is required to provides a username and password in order to play the game. If the application's data is then compromised, then an attacker could use the password, used for the game application, to gain access to other websites where the user might have used the same password. For example, their social networking sites, work account, or financial institution.
+
+## Security terminology
+
+Web application security, sometimes called AppSec, is a subset of cybersecurity that specifically focuses on preventing security vulnerabilities within end-user applications. Web application security involves securing the frontend code running on the user's device and also the backend code running on the web server.
+
+Here is a list of common phrases used by the security community that you should be familiar with.
+
+- **Hacking** - The process of making a system do something it's not supposed to do.
+- **Exploit** - Code or input that takes advantage of a programming or configuration flaw.
+- **Attack Vector** - The method that a hacker employs to penetrate and exploit a system.
+- **Attack Surface** - The exposed parts of a system that an attacker can access. For example, open ports (22, 443, 80), service endpoints, or user accounts.
+- **Attack Payload** - The actual code, or data, that a hacker delivers to a system in order to exploit it.
+- **Input sanitization** - "Cleaning" any input of potentially malicious data.
+- **Black box testing** - Testing an application without knowledge of the internals of the application.
+- **White box testing** - Testing an application by **with** knowledge of the source code and internal infrastructure.
+- **Penetration Testing** - Attempting to gain access to, or exploit, a system in ways that are not anticipated by the developers.
+- **Mitigation** - The action taken to remove, or reduce, a threat.
+
+## Motivation for attackers
+
+The following lists some common motivations at drives a system attack.
+
+- **Disruption** - By overloading a system, encrypting essential data, or deleting critical infrastructure, an attacker can destroy normal business operations. This may be an attempt at extortion, or simply be an attempt to punish a business that that attacker does not agree with.
+- **Data exfiltration** - By privately extracting, or publicly exposing, a system's data, an attacker can embarrass the company, exploit insider information, sell the information to competitors, or leverage the information for additional attacks.
+- **Resource consumption** - By taking control of a company's computing resources an attacker can use it for other purposes such as mining cryptocurrency, gathering customer information, or attacking other systems.
+
+## Examples of security failures
+
+Security should always be a primary objective of any application. Building a web application that looks good and performs well, is a lot less important than building an application that is secure.
+
+Here are a few examples where companies failed to properly prevent attacks to their systems.
+
+- [$100 million dollars stolen through insider trading using SQL injection vulnerability](https://www.theverge.com/2018/8/22/17716622/sec-business-wire-hack-stolen-press-release-fraud-ukraine)
+- [Log4Shell remote code execution vulnerability, 93% of cloud vulnerable at time of discovery, dubbed "the most severe vulnerability ever"](https://en.wikipedia.org/wiki/Log4Shell)
+- [Russian hackers install backdoor on 18,000 government and Fortune 500 computers](https://www.npr.org/2021/04/16/985439655/a-worst-nightmare-cyberattack-the-untold-story-of-the-solarwinds-hack)
+- [State-sponsored hackers infect 20+ Texas towns' computers with ransomware](https://www.usnews.com/news/national-news/articles/2019-08-20/hackers-hold-computers-of-23-texas-towns-for-ransom)
+
+## Common hacking techniques
+
+There are a few common exploitation techniques that you should be aware of. These include the following.
+
+- **Injection**: When an application interacts with a database on the backend, a programmer will often take user input and concatenate it directly into a search query. This allows a hacker can use a specially crafted query to make the database reveal hidden information or even delete the database.
+
+- **Cross-Site Scripting (XSS)**: A category of attacks where an attacker can make malicious code execute on a different user's browser. If successful, an attacker can turn a website that a user trusts, into one that can steal passwords and hijack a user's account.
+
+- **Denial of Service**: This includes any attack where the main goal is to render any service inaccessible. This can be done by deleting a database using an SQL injection, by sending unexpected data to a service endpoint that causes the program to crash, or by simply making more requests than a server can handle.
+
+- **Credential Stuffing**: People have a tendency to reuse passwords or variations of passwords on different websites. If a hacker has a user's credentials from a previous website attack, then there is a good chance that they can successfully use those credentials on a different website. A hacker can also try to brute force attack a system by trying every possible combination of password.
+
+- **Social engineering** - Appealing to a human's desire to help, in order to gain unauthorized access or information.
+
+## What can I do about it?
+
+Taking the time to learn the techniques a hacker uses to attack a system is the first step in preventing them from exploiting your systems. From there, develop a security mindset, where you always assume any attack surface will be used against you. Make security a consistent part of your application design and feature discussions. Here is a list of common security practices you should include in your applications.
+
+- **Sanitize input data** - Always assume that any data you receive from outside your system will be used to exploit your system. Consider if the input data can be turned into an executable expression, or can overload computing, bandwidth, or storage resources.
+- **Logging** - It is not possible to think of every way that your system can be exploited, but you can create an immutable log of requests that will expose when a system is being exploited. You can then trigger alerts, and periodically review the logs for unexpected activity.
+- **Traps** - Create what appears to be valuable information and then trigger alarms when the data is accessed.
+- **Educate** - Teach yourself, your users, and everyone you work with, to be security minded. Anyone who has access to your system should understand how to prevent physical, social, and software attacks.
+- **Reduce attack surfaces** - Do not open access anymore than is necessary to properly provide your application. This includes what network ports are open, what account privileges are allowed, where you can access the system from, and what endpoints are available.
+- **Layered security** - Do not assume that one safeguard is enough. Create multiple layers of security that each take different approaches. For example, secure your physical environment, secure your network, secure your server, secure your public network traffic, secure your private network traffic, encrypt your storage, separate your production systems from your development systems, put your payment information in a separate environment from your application environment. Do not allow data from one layer to move to other layers. For example, do not allow an employee to take data out of the production system.
+- **Least required access policy** - Do not give any one user all the credentials necessary to control the entire system. Only give a user what access they need to do the work they are required to do.
+- **Safeguard credentials** - Do not store credentials in accessible locations such as a public GitHub repository or a sticky note taped to a monitor. Automatically rotate credentials in order to limit the impact of an exposure. Only award credentials that are necessary to do a specific task.
+- **Public review** - Do not rely on obscurity to keep your system safe. Assume instead that an attacker knows everything about your system and then make it difficult for anyone to exploit the system. If you can attack your system, then a hacker will be able to also. By soliciting public review and the work of external penetration testers, you will be able to discover and remove potential exploits.
+
+# OWASP
+
+![owasp](owaspLogo.png)
+
+📖 **Deeper dive reading**: [OWASP 2021](https://owasp.org/www-project-top-ten/)
+
+The Open Web Application Security Project (OWASP) is a non-profit research entity that manages the _Top Ten_ list of the most important web application security risks. Understanding, and periodically reviewing, this list will help to keep your web applications secure.
+
+The following is a discussion of each of the entries in the top ten list, along with examples, and suggested mitigations.
+
+## A01 Broken Access Control
+
+📖 **Deeper dive reading**: [snyk Learn broken access control](https://learn.snyk.io/lessons/broken-access-control/javascript/)
+
+Broken access control occurs when the application doesn't properly enforce permissions on users. This could mean that a non-admin user can do things that only an admin should be able to do, or admin accounts are improperly secured. While browser application code can restrict access by disabling UI for navigating to sensitive functionality, the ultimate responsibility for enforcing access control rests upon the application service.
+
+As an example of broken access control, consider an application where the UI only provides a navigation to the administrator application settings if the user is an administrator. However, the attacker can simply change the URL to point to the application settings URL and gain access. Additionally, unless the service endpoints reject requests to obtain, and update, the application settings, any restrictions that the UI provides are meaningless.
+
+Mitigations include:
+
+- Strict access enforcement at the service level
+- Clearly defined roles and elevation paths
+
+## A02 Cryptographic Failures
+
+Cryptographic failures occur when sensitive data is accessible either without encryption, with weak encryption protocols, or when cryptographic protections are ignored.
+
+Sending any unencrypted data over a public network connection allows an attacker to capture the data. Even private, internal, network connections, or data that is store without encryption, is susceptibly to exploitation once an attacker gains access to the internal system.
+
+Examples of ineffective cryptographic methods include hashing algorithms like MD5 and SHA-1 that are trivial to crack with modern hardware and tools.
+
+Another cryptographic failure happens when applications do not validate the provided web certificate when establishing a network connection. This is a case of falsely assuming that if the protocol is secure then the entity represented by the protocol is acceptable.
+
+Mitigations include:
+
+- Use strong encryption for all data. This includes external, internal, in transit, and at rest data.
+- Updating encryption algorithms as older algorithms become compromised.
+- Properly using cryptographic safeguards.
+
+## A03 Injection
+
+📖 **Deeper dive reading**: [Snyk Learn SQL injection](https://learn.snyk.io/lessons/sql-injection/javascript/)
+
+Injection exploits occur when an attacker is allowed to supply data that is then injected into a context where it violates the expected use of the user input. For example, consider an input field that is only expected to contain a user's password. Instead the attacker supplies a SQL database command in the password input.
+
+**Supplied password**
+
+```js
+`p@ssword!'; DROP TABLE db; --`;
+```
+
+The application then uses a template SQL query to validate the user's password.
+
+**Template query**
+
+```js
+`SELECT user FROM db WHERE password='${password}' LIMIT 1`;
+```
+
+When the supplied input is injected into the template an unintended query results. Notice that this query will delete the entire database table.
+
+**Resulting query**
+
+```sql
+SELECT user FROM db WHERE password='p@ssword!'; DROP TABLE db; -- ` LIMIT 1
+```
+
+Mitigations include:
+
+- Sanitizing input
+- Use database prepared statements
+- Restricting execution rights
+- Limit output
+
+## A04 Insecure Design
+
+📖 **Deeper dive reading**: [Snyk Learn insecure design](https://learn.snyk.io/lessons/insecure-design/javascript/)
+
+Insecure design broadly refers to architectural flaws that are unique for individual systems, rather than implementation errors. This happens when the application team doesn't focus on security when designing a system, or doesn't continuously reevaluate the application's security.
+
+Insecure design exploits are based upon unexpected uses of the business logic that controls the functionality of the application. For example, if the application allows for trial accounts to be easily created, then an attacker could create a denial of service attack by creating millions of accounts and utilizing the maximum allowable usage.
+
+Mitigations include:
+
+- Integration testing
+- Strict access control
+- Security education
+- Security design pattern usages
+- Scenario reviews
+
+## A05 Security Misconfiguration
+
+Security misconfiguration attacks exploit the configuration of an application. Some examples include using default passwords, not updating software, exposing configuration settings, or enabling unsecured remote configuration.
+
+For example, some third party utilities, such as a logging system, will expose a public administration interface that has a default user name and password. Unless that configuration is changed, an attacker will be able to access all of the critical logging information for your application.
+
+Mitigations include:
+
+- Configuration reviews
+- Setting defaults to disable all access
+- Automated configuration audits
+- Requiring multiple layers of access for remote configuration
+
+## A06 Vulnerable and Outdated Components
+
+📖 **Deeper dive reading**: [Snyk Learn vulnerable and outdate components](https://learn.snyk.io/lessons/vulnerable-and-outdated-components/javascript/)
+
+The longer an application has been deployed, the more likely it is that the attack surface, and corresponding exploits, of the application will increase. This is primarily due to the cost of maintaining an application and keeping it up to date in order to mitigate newly discovered exploits.
+
+Outdated components often accumulate as third party packages are used by the application. Over time the packages are updated in order to address security concerns, or somethings the packages stop being supported. When this happens your application becomes vulnerable. Consider what happens when a request to install NPM packages displays the following warning:
+
+```sh
+➜  npm install
+
+up to date, audited 1421 packages in 3s
+
+7 high severity vulnerabilities
+
+To address all issues (including breaking changes), run:
+  npm audit fix --force
+
+Run `npm audit` for details.
+```
+
+The application developer is warned that the components are vulnerable, but when faced choice of taking the time to update packages, and potentially break the application, or meeting deliverable deadlines, the developer is tempted to ignore the warning and continue without addressing the possible problem.
+
+Mitigations include:
+
+- Keeping a manifest of your software stack including versions
+- Reviewing security bulletins
+- Regularly updating software
+- Required components to be up to date
+- Replacing unsupported software
+
+## A07 Identification and Authentication Failures
+
+Identification and authentication failures include any situation where a user's identity can be impersonated or assumed by an attacker. For example, if an attacker can repeatedly attempt to guess a user's password, then eventually they will be successful. Additionally, if passwords are exposed outside of the application, or are stored inside the application, with weak cryptographic protection, then they are susceptible to attack.
+
+Another example of an identification failure would be a weak password recovery process that doesn't properly verify the user. Common practices such as asking for well known security questions (e.g. mother's maiden name) from a user fall into this category.
+
+Mitigations include:
+
+- Rate limiting requests
+- Properly managing credentials
+- Multifactor authentication
+- Authentication recovery
+
+## A08 Software and Data Integrity Failure
+
+Software and data integrity failures represent attacks that allow external software, processes, or data to compromise your application. Modern web applications extensively use open source and commercially produced packages to provide key functionality. Using these packages without conducting a security audit, gives them an unknown amount of control over your application. Likewise, using a third party processing workflow, or blindly accessing external data, opens you up to attacks.
+
+Consider the use of a third party continuous delivery (CD) pipeline for deploying your application to a cloud provider. If the CD provider is penetrated by an attacker then they also gain access to your production cloud environment.
+
+Another example is the use of an NPM package that is controlled by an attacker. Once the package has gained general acceptance, the attacker can subtly change the package to capture and deliver sensitive information.
+
+Mitigations include:
+
+- Only using trusted package repositories
+- Using your own private vetted repository
+- Audit all updates to third party packages and data sources
+
+## A09 Security Logging and Monitoring Failures
+
+📖 **Deeper dive reading**: [Snyk Learn logging vulnerabilities](https://learn.snyk.io/lessons/logging-vulnerabilities/javascript/)
+
+Proper system monitoring, logging, and alerting is critical to increasing security. One of the first things an attacker will do after penetrating your application is delete or alter any logs that might reveal the attacker's presence. A secure system will store logs that are accessible, immutable, and contain adequate information to detect an intrusion, and conduct post-mortem analysis.
+
+An attacker might also try to create a smoke screen in the monitoring system in order to hide a true attack. This might consist of a barrage of periodic ineffective attacks that hide the insertion of a slightly different effective one.
+
+Mitigations include:
+
+- Real time log processing
+- Automated alerts for metric threshold violations
+- Periodic log reviews
+- Visual dashboards for key indicators
+
+## A10 Server Side Request Forgery (SSRF)
+
+📖 **Deeper dive reading**: [Snyk Learn SSRF](https://learn.snyk.io/lessons/ssrf-server-side-request-forgery/javascript/)
+
+This category of attack causes the application service to make unintended internal requests, that utilized the service's elevated privileges, in order to expose internal data or services.
+
+For example, if your service exposed an endpoint that let a user retrieve an external profile image based upon a supplied URL, an attacker could change the URL to point to a location that is normally only available to the service internally.
+
+The following command would theoretically return the internal AWS service metadata that includes the administrative access token.
+
+```sh
+curl https://yourdomain.click/user/image?imgUrl=http://169.254.169.254/latest/meta-data/iam/security-credentials/Admin-Role
+```
+
+Mitigations include:
+
+- Sanitizing returned data
+- Not returning data
+- Whitelisting accessible domains
+- Rejecting HTTP redirects
+
+# TypeScript
+
+📖 **Deeper dive reading**: [Typescript in 5 minutes](https://www.typescriptlang.org/docs/handbook/typescript-in-5-minutes.html)
+
+TypeScript adds static type checking to JavaScript. This provides type checking while you are writing the code to prevent mistakes like using a string when a number is expected. Consider the following simplistic JavaScript code example.
+
+```js
+function increment(value) {
+  return value + 1;
+}
+
+let count = 'one';
+console.log(increment(count));
+```
+
+When this code executes the console will log `one1` because the count variable was accidentally initialized with a string instead of a number.
+
+With TypeScript you explicitly define the types, and as the JavaScript is transpiled (with something like Babel) an error will be generate long before the code is seen by a user. To provide type safety for our increment function, it would look like this:
+
+```ts
+function increment(value: number) {
+  return value + 1;
+}
+
+let count: number = 'one';
+console.log(increment(count));
+```
+
+With TypeScript enabled, VS Code will analyze the code and give you an error about the invalid type conversion.
+
+![TypeScript bad assignment](typescriptBadAssignment.jpg)
+
+In addition to defining types for function parameters, you can define the types of object properties. For example, when defining the state for a React class style component, you can specify the types of all the state and property values.
+
+```ts
+export class About extends React.Component {
+  state: {
+    imageUrl: string;
+    quote: string;
+    price: number;
+  };
+
+  constructor(props: { price: number }) {
+    super(props);
+
+    this.state = {
+      imageUrl: '',
+      quote: 'loading...',
+      price: props.price,
+    };
+  }
+}
+```
+
+You can likewise specify the type of a React function style component's properties with an inline object definition.
+
+```ts
+function Clicker(props: { initialCount: number }) {
+  const [count, updateCount] = React.useState(props.initialCount);
+
+  return <div onClick={() => updateCount(1 + count)}>Click count: {count}</div>;
+}
+```
+
+## Interfaces
+
+Because it is so common to define object property types, TypeScript introduced the use of the `interface` keyword to define a collection of parameters and types that an object must contain in order to satisfy the interface type. For example, a Book interface might look like the following.
+
+```ts
+interface Book {
+  title: string;
+  id: number;
+}
+```
+
+You can then create an object and pass it to a function that requires the interface.
+
+```ts
+function catalog(book: Book) {
+  console.log(`Cataloging ${book.title} with ID ${book.id}`);
+}
+
+const myBook = { title: 'Essentials', id: 2938 };
+catalog(myBook);
+```
+
+## Beyond type checking
+
+TypeScript also provides other benefits, such as warning you of potential uses of an uninitialized variable. Here is an example of when a function may return null, but the code fails to check for this case.
+
+![TypeScript uninitialized](typescriptUninitialized.jpg)
+
+You can correct this problem with a simple `if` block.
+
+```ts
+const containerEl = document.querySelector<HTMLElement>('#picture');
+if (containerEl) {
+  const width = containerEl.offsetWidth;
+}
+```
+
+Notice that in the above example, the return type is coerced for the `querySelector` call. This is required because the assumed return type for that function is the base class `Element`, but we know that our query will return the subclass `HTMLElement` and so we need to cast that to the subclass with the `querySelector<HTMLElement>()` syntax.
+
+### Unions
+
+TypeScript introduces the ability to define the possible values for a new type. This is useful for doing things like defining an enumerable.
+
+With plain JavaScript you might create an enumerable with a class.
+
+```js
+export class AuthState {
+  static Unknown = new AuthState('unknown');
+  static Authenticated = new AuthState('authenticated');
+  static Unauthenticated = new AuthState('unauthenticated');
+
+  constructor(name) {
+    this.name = name;
+  }
+}
+```
+
+With TypeScript you can define this by declaring a new type and defining what its possible values are.
+
+```ts
+type AuthState = 'unknown' | 'authenticated' | 'unauthenticated';
+
+let auth: AuthState = 'authenticated';
+```
+
+You can also use unions to specify all of the possible types that a variable can represent.
+
+```ts
+function square(n: number | string) {
+  if (typeof n === 'string') {
+    console.log(`{$n}^2`);
+  } else {
+    console.log(n * n);
+  }
+}
+```
+
+## Using TypeScript
+
+If you would like to experiment with TypeScript you can use [CodePen](https://codepen.io), or the official [TypeScript playground](https://www.typescriptlang.org/play). The TypeScript playground has the advantage of showing you inline errors and what the resulting JavaScript will be.
+
+![typescript playground](typescriptPlayground.jpg)
+
+To use TypeScript in your web application you can create your project using the `create-react-app` CLI and specifying the `--template typescript` switch. This will configure the template application to use TypeScript.
+
+```sh
+npx create-react-app my-app --template typescript
+```
+
+If you want to convert an existing application, then install the NPM `typescript` package to your development dependencies.
+
+```sh
+npm install --save-dev typescript
+```
+
+This will only include typescript package when you are developing and will not distribute it with a production bundle.
+
+Once you have TypeScript installed for your project, you then configure how you want TypeScript to interact with your code by creating a `tsconfig.json` file.
+
+If your project structure is configured to have your source code in a directory named `src`, and you want to output to a directory named `build` then you would use the following TS configuration file.
+
+```js
+{
+  "compilerOptions": {
+    "rootDir": "src",
+    "outDir": "build",
+    "target": "es5",
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "noFallthroughCasesInSwitch": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "react-jsx"
+  },
+  "include": [
+    "./src/**/*"
+  ]
+}
+```
+
+To learn what all of the tsconfig.json options do, refer to [What is a tsconfig.json](https://www.typescriptlang.org/docs/handbook/tsconfig-json.html).
+
+
+# Search engine optimization
+
+📖 **Deeper dive reading**: [Google Search Central](https://developers.google.com/search)
+
+Once Google became the de facto search engine for the internet, a new industry was created to help websites get the top search result spots. Modifying your application for search results is called search engine optimization (SEO). While SEO has nothing to do with the functionality of your application, it has everything to do with its success. You can save millions of dollars in marketing if your application appears in the top search ranking for common user searches.
+
+There are several factors that are major contributors to your search rank. These include:
+
+1. Content
+1. Authoritative links
+1. Structure and organization
+1. Metadata
+1. Performance and usability
+
+Let's take a closer look at each of these.
+
+## Content
+
+Search engines pay a lot of attention to the value an application provides. One of the ways you can provide significant value is to host interesting, current, easily accessible content. For example, if your application is about the game Simon, then you should include a history of the game, strategies for playing the game, current news about competitions, and biographies of the world's best players. The key is that there is lots of interesting content and that it is kept current.
+
+You want to make sure that you provide both textual and video content. Also make sure that the content is available without authentication or payment.
+
+## Authoritative links
+
+The success of the Google Page Rank algorithm is founded on determining how authoritative an application is. The more websites that point to your application the higher its search ranking will be. If you can get an influencer to link to your content, or get links from other authoritative applications you will see a significant bump in your ranking.
+
+You also want to be an authority to yourself. This includes links from other applications that you own, and internal application links. Making sure that you have multiple paths to key content from within your application will help the Google crawler find the content and value its authority.
+
+## Structure and organization
+
+You need to properly use HTML elements to correctly define and organize your application. The Google search crawler is an automated bot. That means it will not spend a lot of effort trying to guess what you meant with the `div` or `span` element, when they actually represent a `title` or `a` element. Leveraging the semantic meaning of HTML will help the crawler navigate your content.
+
+You want to make sure that your content is not hidden behind JavaScript interactions. When the crawler hits a URL, the important content should be rendered. The crawler should not have to interact with the application before the content is injected.
+
+Key HTML elements include the `title` and `heading` elements. The title and heading elements should contain text that clearly defines the value of your content, and include keywords that you want in the search index.
+
+## Metadata
+
+HTML defines several elements and attributes that search crawlers specifically target. This includes the `description`, `robots`, social media open graph (`og`), and image alt attributes.
+
+If you were creating a description for Simon, you would include something like the following description meta element on the home page of your application.
+
+```html
+<meta name="description" content="Game play, news, rankings, tips, and instruction for Simon." />
+```
+
+The robots meta element instructs the crawler how to specifically index a given page. The image alt attribute tells the crawler the keywords for a given image.
+
+The open graph (`og`) meta tags are used by social media websites to give a preview of your application. Crawlers consider information like this as a reflection that the application is modern and more interesting to users.
+
+```html
+<meta property="og:title" content="Play Simon online" />
+<meta property="og:description" content="News, rankings, instruction, and competitive online play for Simon." />
+<meta property="og:image" content="https://simon.cs260.click/simon.png" />
+```
+
+### Sitemap
+
+A sitemap is a textual file that you distribute with your application. It describes the major content pieces of your application and aids in search crawler navigation. If you have a small application then a sitemap is probably not necessary. If you have hundreds, or thousands, of content pages then you definitely want to build a sitemap and submit it to the Google Search Console.
+
+Here is an example of a simple sitemap file with a single entry.
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://simon.cs260.click/news/2022-world-champion.html</loc>
+    <lastmod>2023-01-17</lastmod>
+  </url>
+</urlset>
+```
+
+### Robots.txt
+
+The `robots.txt` file tells the crawler what parts of your application is off limits. Here is an example robots.txt file:
+
+```yaml
+# cs260.com/robots.txt
+# Tell Google not to crawl the game play path,
+# because it won't be useful in Google Search results.
+User-agent: googlebot
+Disallow: /play/
+```
+
+To include a robots.txt file for your application you simply create the file with the specific name `robots.txt` and serve it from the root of your domain.
+
+## Performance and usability
+
+In addition to authority, Google wants to rank results by quality. That means it will check how performant your application is and how good the user experience (UX) is. This includes measurements such as the time it takes for the first byte to load, how long it takes to render the page, and how well your application works on mobile devices.
+
+## Tools
+
+### Google search
+
+You want to frequently do a Google search for your application's domain to see how much of it is being indexed. You can do this by querying Google with your domain name prefixed with `site:`. For example, here is the current result for `site:simon.cs260.click`.
+
+![Simon SEO search](seoGoogleSearch.jpg)
+
+This shows that Google is not indexing any pages from the domain. It looks like we have some SEO work to do. Probably some authoritative links will help.
+
+### PageSpeed Insights
+
+PageSpeed Insights is similar to the Chrome browser debugging tool Lighthouse, but it allows you to run it from a webpage. Using a tool like Insights is helpful because performance and usability are key factors in determining your search ranking. The better the rating you get from PageSpeed Insights, the better your search ranking will be.
+
+Here is the result of examining `simon.cs260.click`. This shows that it is performing well, but that it is not optimal for SEO.
+
+![PageSpeed Insights](seoPageSpeedInsights.jpg)
+
+If we dig into the SEO section of the report we see that there is no Robots.txt file and the description meta element is missing.
+
+![PageSpeed Insights SEO](seoPageSpeedInsightsSeo.jpg)
+
+### Google Search Console
+
+The [Google Search Console](https://search.google.com/search-console/about) contains many tools to help you understand how your application is being indexed and why. This includes information about your website's performance, what pages are indexed, your mobile usability, and information about the site's overall user experience.
+
+![Google Search Console](seoGoogleSearchConsole.jpg)
+
+To get started with the Google Search Console, you need to add a DNS `TXT` record to your application's domain DNS information. This is similar to when you added an `A` or `CNAME` record when you first set up your DNS information with the AWS Route 53 service.
+
+![Google Search Console Verify](seoGoogleSearchConsoleVerify.jpg)
+
+Once your ownership of the domain name is verified, the Google Search Console will start tracking statistics for your domain. Check back often to gain insight on how you can improve your search ranking.
+
+
+# Device APIs
+
+Every year browsers mature and increase the features that they provide. Sometimes these features are exposed as APIs (Application programming interfaces) that allow a web application to interact with the user through browser, operating system, or device features. For example, your application could take advantage of location services that tell you where your user is physically located, or read a user's contacts in order to allow them to share information with their peers. As these APIs become standard across all browsers they enable web applications to behave more and more like historical native device applications.
+
+## Respecting privacy
+
+Most device APIs require the user to consent to your application's use of the API, but as long as your application is providing value and not just trying to invade the user's privacy, that usually isn't a problem. For example, a good use of location services, would be a restaurant finder application that suggests nearby venues. A bad example of using locations services, would be a Sudoku game that sold your home address to advertisers. In some governmental jurisdictions such uses would be considered illegal.
+
+## Location API
+
+📖 **Deeper dive reading**: [MDN Location API](https://developer.mozilla.org/en-US/docs/Web/API/Geolocation_API/Using_the_Geolocation_API)
+
+The location API provides the GPS location of the device. Like the notification API, the user will be prompted for permission to access their location. After permission is granted then the `navigator.geolocation` API will return the user's location.
+
+The following React component will display the user's location once it loads.
+
+```jsx
+import React from 'react';
+
+export function Location() {
+  const [position, updatePosition] = React.useState({ lat: 0, long: 0 });
+
+  React.useEffect(() => {
+    console.log('updating pos');
+    navigator.geolocation.getCurrentPosition((p) => {
+      updatePosition({ lat: p.coords.latitude, long: p.coords.longitude });
+    });
+  }, []);
+
+  return (
+    <div>
+      {position.lat !== 0 && (
+        <div>
+          <h1>Your location</h1>
+          <div>Latitude: {position.lat}</div>
+          <div>Longitude: {position.long}</div>
+          <div>
+            <iframe
+              title='map'
+              width='600'
+              height='300'
+              src={`https://www.openstreetmap.org/export/embed.html?bbox=${position.long + 0.001},${
+                position.lat + 0.001
+              },${position.long - 0.001},${position.lat - 0.001}&amp;layer=mapnik`}
+            ></iframe>
+          </div>
+        </div>
+      )}
+      {position.lat === 0 && <div>Location unknown</div>}
+    </div>
+  );
+}
+```
+
+You can try this out by creating a simple React app and adding a new component file named `location.js` that contains the above code. Then include Location component in the `App.js` file.
+
+```jsx
+import { Location } from './location';
+
+function App() {
+  return (
+    <div className='App'>
+      <header className='App-header'>
+        <Location></Location>
+      </header>
+    </div>
+  );
+}
+```
+
+![Location API](locationAPI.jpg)
+
+## Notification API
+
+📖 **Deeper dive reading**: [MDN Notification API](https://developer.mozilla.org/en-US/docs/Web/API/Notifications_API)
+
+As an example of integrating your web application with the device, let's look at the Notification API.
+
+The following React code has a function to register the user's permission to display notifications, and a function to send notifications. The state representing a user's permission is initialized with the Notification API `permission` property. The state of the property can be `default` (not set), `granted`, or `denied`. If a user grants permission then the `Notification` class may be used to actually display a notification.
+
+The rest of the code controls the UI for the display state, buttons, and message input.
+
+```jsx
+function Notifier() {
+  const [acceptanceState, updateAcceptanceState] = React.useState(Notification.permission);
+  const [msg, updateMsg] = React.useState('');
+
+  function register() {
+    Notification.requestPermission().then((response) => {
+      updateAcceptanceState(response);
+    });
+  }
+
+  function notify() {
+    new Notification('You are notified', {
+      body: msg,
+    });
+    updateMsg('');
+  }
+
+  return (
+    <div className='component'>
+      <p>User's acceptance of notifications: {acceptanceState}</p>
+      {acceptanceState === 'default' && <button onClick={() => register()}>Register</button>}
+      {acceptanceState === 'granted' && (
+        <div>
+          <input type='text' value={msg} onChange={(e) => updateMsg(e.target.value)} placeholder='msg here'></input>
+          <button disabled={msg === ''} onClick={() => notify()}>
+            Notify
+          </button>
+        </div>
+      )}
+    </div>
+  );
+}
+```
+
+Here is what the code looks like in action.
+
+![Notification Example](notificationApi.gif)
+
+## Other APIs
+
+Other interesting device APIs include the [Contact Picker](https://developer.mozilla.org/en-US/docs/Web/API/Contact_Picker_API), [Bluetooth](https://developer.mozilla.org/en-US/docs/Web/API/Bluetooth/requestDevice), and [File System](https://developer.mozilla.org/en-US/docs/Web/API/File_System_Access_API).
+
+Before you get too excited about using any device API make sure you check the current browser support for the API so that you can make sure you properly serve your target market. If a specific device is not supported on some device or browser, you can always hide that functionality for those users while still providing it for others.
+
+
