@@ -2774,7 +2774,7 @@ You can now view test-react in the browser.
 
 This should automatically launch the application and open your browser to display the application running on port 3000.
 
-![React CLI Application](reactCliApp.png)
+![React CLI Application](photos/reactCliApp.png)
 
 To stop the application, use the `CTRL-C` (kill) keystroke in the console window where you started it.
 
@@ -2817,7 +2817,7 @@ All the other files provide styling, use on mobile devices, testing, and perform
 
 When the browser requests to load your application it gets `index.html` by default. `index.html` contains the basic metadata for the application, but the actual content is injected into the HTML, at runtime, based upon the code contained in `index.js`. This happens because React by default will look for a file named `index.js` and execute it. The `index.js` file contains code that looks for a `div` element named `root` and renders the App component into that div. This causes the `App` component to be loaded from `App.js` which finally provides the content that you see visualized in the browser.
 
-![React flow](reactCliFlow.png)
+![React flow](photos/reactCliFlow.png)
 
 From this basic template code, you can build your application by replacing the App component, adding new React child components to the App component, and introducing a React router.
 
@@ -2834,7 +2834,7 @@ When you run `npm start` it executes the `start` script found in `package.json`.
 
 This runs another NPM CLI package called `react-scripts` and tells it to build the application from the code and launch it with a development HTTP server similar to the Live Server extension you have been using in VS Code. `react-scripts` then launches your browser and points it to `localhost:3000` where you can see the application rendering. Note that the development HTTP server will monitor changes to the application source and automatically rebuild it. Try this out by starting the application, editing the `App.js` file to contain something different, saving it, and looking at the browser window displaying the application.
 
-![React CLI reload](reactCliReload.gif)
+![React CLI reload](photos/reactCliReload.gif)
 
 When `react-scripts` builds the application it converts the React JSX files to valid JavaScript and populates the `index.html` file with references to the generated files. If you look at `index.html` in your project, you will see that it contains a fairly bare bones HTML page.
 
