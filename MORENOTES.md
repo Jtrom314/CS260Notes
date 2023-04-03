@@ -3783,7 +3783,7 @@ The introduction of React converts our application from a **multi-page applicati
 
 For this deliverable, we use the [React](https://reactjs.org/) framework and the associated `create-react-app` package to convert Simon into a React based application.
 
-# Steps to convert Simon to React
+## Steps to convert Simon to React
 
 The following section discusses the general steps taken to convert the Simon application from a simple HTML/CSS/JavaScript application to a React application. You will need to take similar steps for your start up project and so it is important to understand what is happening at each step conversion process. You don't necessarily have to go through this process with the Simon demonstration application, but it is a safe place to try since you have both the starting version (simon-websocket) and the ending version (simon-react) to reference.
 
@@ -3815,7 +3815,7 @@ The final Simon project structure look like the following.
 
 ![Simon project structure](simonReactProjectStructure.jpg)
 
-## Reorganize Simon
+### Reorganize Simon
 
 Because we are hosting both the Simon React application and the Simon service web service in the same project we need to put them each in separate directories. We want the service code in a `service` directory and the React code in the `src` directory. To accomplish this, first delete the `node_modules` directory from the `simon` directory. Then move the service code (`package.json`, `package-lock.json`, `index.js`, `database.js`, and `peerProxy.js`) into a subdirectory named `service`. Then run `npm install` in the `service` directory in order to get the NPM packages for the service.
 
@@ -3829,11 +3829,11 @@ Once you move the service to the `service` directory, you can test that the serv
 
 Next, we want to put the existing UI code in a temporary place where we can then copy from as we move it to the React componentized version contained in the React `src` directory. To do this we rename the `public` directory to `old-public`. Once we have moved all the code over, we can delete the `old-public` directory.
 
-## Move template files to Simon
+### Move template files to Simon
 
 Copy over the generated files from the `template-react` directory to the `simon` repository directory. You can now delete the template `template-react` directory. All steps from this point on are done in the `simon` repository directory. Run `npm install` in the root of the `simon` directory to get all of the NPM packages that React uses.
 
-## Populate App.jsx
+### Populate App.jsx
 
 One of the big advantages of React is the ability to represent your web application as a modular single page application instead of a set of interconnected redundant HTML pages. Instead of an HTML page for each functional piece, you now have a React component for each functional piece. The `app.jsx` file represents the application component that is the parent of all our other components. To make `app.jsx` the Simon application component, we first move the header and footer HTML into the render function for the app. Since, this is now JSX instead of HTML we rename the `class` attribute to be `className` so that it doesn't conflict with the JavaScript `class` keyword.
 
@@ -3931,7 +3931,7 @@ React.useEffect(() => {
 }
 ```
 
-## Create view components
+### Create view components
 
 We now create React component files `login.jsx`, `play.jsx`, `scores.jsx`, and `about.jsx` to represent each of the application views. To begin with these are just stubs that we will populate as we move functionality from the old `js` files into the `jsx` components. We place each of the stubbed components in a separate directory (e.g. `src/login/login.jsx) so that we can keep all of the component files together.
 
@@ -3949,7 +3949,7 @@ export function Login() {
 }
 ```
 
-## Create the router
+### Create the router
 
 With `app.jsx` containing the header and footer and all the application view component stubs created, we can now create the router that will display each component as the navigation UI requests it.
 
@@ -4038,7 +4038,7 @@ function NotFound() {
 
 At this point the React application should run. You can test this.
 
-## Converting to React components
+### Converting to React components
 
 Each of the HTML pages in the original code needs to be converted to a component represented by a corresponding `jsx` file. Each of the components is a bit different, and so you want to inspect them to see what they look like as a React component.
 
@@ -4055,7 +4055,7 @@ The basic steps for converting the component include the following.
 - Move state up to parent components as necessary. For example, authentication state, or user name state.
 - Create child components as necessary. For example, a SimonGame and SimonButton component.
 
-## Convert to React Bootstrap
+### Convert to React Bootstrap
 
 There is an NPM package called [React Bootstrap](https://react-bootstrap.github.io/) that wraps the Bootstrap CSS framework in React components. This allows you to treat the Bootstrap widgets such as Button and Modal as a React component instead of just imported CSS and JavaScript.
 
@@ -4074,7 +4074,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 For Simon we converted the modal dialog and button implementations to use the React Bootstrap components.
 
-## Setup to debug
+### Setup to debug
 
 When running in production, the Simon web service running under Node.js on port 3000 serves up the Simon React application code when the browser requests `index.html`. This is the same as we did with previous Simon deliverables. The service pulls those files from the application's static HTML, CSS, and JavaScript files located in the `public` directory that we set up when we build the production distribution package.
 
@@ -4113,6 +4113,6 @@ if (process.env.NODE_ENV !== 'production') {
 
 This is a bit of annoying configuration, but without it you won't be able to debug your entire application in your development environment.
 
-## Test as you go
+### Test as you go
 
 That was a lot of changes and it is easy to make a mistake during the process. It is easier if you start with the working app that `create-react-app` builds and then make sure it runs (using `npm run start`) without error. Make sure you understand everything it is doing before it gets more complex. Then make a small change, and test that it works. That way you can see where things get broken before it gets out of hand.
