@@ -2557,6 +2557,69 @@ const hello = <div>Hello</div>;
 ReactDOM.render(hello, document.getElementById('root'));
 ```
 
+### Passing information between Child and Parent components in React
+
+To send data to a parent component from a child component, create a function in the parent component and pass the function as a prop to the child component.
+
+```js
+import React from 'react'
+
+export function Parent() {
+    const childToParent = () => {
+
+    }
+    return (
+        <Child childToParent={childToParent}/>
+    )
+}
+```
+
+Then in the child component, accept the function call as a props and assign it to an onClick event
+
+```js
+import React from 'react'
+
+function Child({childToParent}) {
+    const data = {
+        string: "This is a string",
+        number: 1,
+        bool: true
+    }
+
+    return (
+        <div onClick={() => childToParent(data)}></div>
+    )
+}
+
+export { Child }
+
+```
+
+Then in the parent componet, use a useState hook to set / manipulate the data recieved
+
+```js
+import {useState} from 'react'
+import Child from './Child'
+
+function Parent() {
+    const [data, setData] = useState('')
+
+    const childToParent() = (childData) => {
+        let string = childData.string
+        setData(string)
+    }
+
+    return (
+        <>
+            <div>
+                {data}
+            </div>
+            <Child childToParent = {childToParent}>
+        </>
+    )
+}
+
+
 ### Class style components
 
 In addition to the preferred `function style` components demonstrated above, React also supports `class style` components. However, you should note that the React team is moving away from the class style representation, and for that reason you should probably not use it. With that said, you are likely to see class style components and so you should be aware of the syntax. Below is the equivalent class style component for the Clicker component that we created above.
@@ -3131,6 +3194,17 @@ Taking the time to learn the techniques a hacker uses to attack a system is the 
 📖 **Deeper dive reading**: [OWASP 2021](https://owasp.org/www-project-top-ten/)
 
 The Open Web Application Security Project (OWASP) is a non-profit research entity that manages the _Top Ten_ list of the most important web application security risks. Understanding, and periodically reviewing, this list will help to keep your web applications secure.
+
+1. Broken Access Control
+1. Cryptographic Failures
+1. Injection
+1. Insecure Design
+1. Security Misconfiguration
+1. Vulnerable Components
+1. ID and Auth Failures
+1. CDN
+1. Logging Failures
+1. The Line of Death
 
 The following is a discussion of each of the entries in the top ten list, along with examples, and suggested mitigations.
 
