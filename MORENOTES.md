@@ -2619,7 +2619,7 @@ function Parent() {
     )
 }
 
-
+```
 ### Class style components
 
 In addition to the preferred `function style` components demonstrated above, React also supports `class style` components. However, you should note that the React team is moving away from the class style representation, and for that reason you should probably not use it. With that said, you are likely to see class style components and so you should be aware of the syntax. Below is the equivalent class style component for the Clicker component that we created above.
