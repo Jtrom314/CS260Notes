@@ -67,7 +67,7 @@ Here is a list of common port numbers that you will might come across.
 
 ## Your ports
 
-As an example of how ports are used we can look at your web server. When you built your web server you externally exposed port 22 so that you could use SSH to open a remote console on the server, port 443 for secure HTTP communication, and port 80 for unsecure HTTP communication.
+As an example of how ports are used we can look at your web server. When you built your web server you externally exposed port 22 so that you could use SSH to open a remote console on the server, port 443 for secure HTTP communication, and 0 for unsecure HTTP communication.
 
 ![Ports](photos/webServicesPorts.jpg)
 
@@ -4382,3 +4382,40 @@ This is a bit of annoying configuration, but without it you won't be able to deb
 ### Test as you go
 
 That was a lot of changes and it is easy to make a mistake during the process. It is easier if you start with the working app that `create-react-app` builds and then make sure it runs (using `npm run start`) without error. Make sure you understand everything it is doing before it gets more complex. Then make a small change, and test that it works. That way you can see where things get broken before it gets out of hand.
+
+
+# Final Review
+
+Cookies allow a server to store data on the client (for the server to use)
+
+Which is NOT a standard HTTP header? 
+  1. Language (ARE: Host, Content-type, Cookie)
+
+You CAN use fetch in front-end and back-end code
+
+What is NOT a purpose of JSX? 
+  1. To combine CSS, HTML, and JavaScript
+
+Which expresss middleware will match this fetch request?
+const r = await fetch('/fav/ringo', {
+  method: 'DELETE'
+});
+app.delete(/fav\/(.*)/, () => {})
+
+Which of the following is NOT true about a Linux daemon?
+  1. Cannot fork other processes
+
+Why is hashing stored passwords important
+  1. It improves security by making the password unreadable
+
+What value does WebSocket add to HTTP?
+  1. It is peer to peer instead of client to server
+
+React.useEffect(() => updateX(D), []);
+UseEffect is called on the inital render and every time a dependency is changed
+
+HTTP status codes in the 300 range
+  1. Content redirects or caching
+
+What does the command "NPM install ws" NOT do?
+  1. Adds template code for websockets to your JavaScript
